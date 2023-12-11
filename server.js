@@ -1,11 +1,14 @@
 const mongoose = require('mongoose');
-mongoose.connect("mongodb://127.0.0.1:27017/Ecart", {
+require('dotenv').config();
+const atlasConnectionUri = process.env.MONGO;
+
+mongoose.connect(atlasConnectionUri, {
     useNewUrlParser: true,
-    useUnifiedTopology: true,
+    useUnifiedTopology: true, 
 })
     .then(() => {
-        
-        console.log("mongo connected succesfully");
-    }).catch(error=> {
-        console.log(error);
+        console.log("MongoDB connected successfully");
     })
+    .catch(error => {
+        console.error("Error connecting to MongoDB:", error);
+    });

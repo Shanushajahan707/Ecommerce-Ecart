@@ -26,14 +26,14 @@ const checkSessionAndBlocked = async (req, res, next) => {
 };
  
 //order summary page render
-router.get('/ordersummary',checkSessionAndBlocked, ordercontroller.orderpage)
+router.get('/ordersummary', ordercontroller.orderpage)
 //order order checkout page
 router.post('/orderdata', ordercontroller.ordercheckout)
 router.post('/placeOrderWithWallet',ordercontroller.walletorder)
 //cancel order 
 router.get('/cancelorder/:id', ordercontroller.canceluserorder)
 
-router.get('/submit-return/:id',checkSessionAndBlocked,ordercontroller.returnorder)
+router.get('/submit-return/:id',ordercontroller.returnorder)
 
 
 

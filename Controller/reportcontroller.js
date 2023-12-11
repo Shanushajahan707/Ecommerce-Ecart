@@ -3,16 +3,15 @@ const router = express.Router();
 const ordercollection = require('../models/order')
 const addresscollection = require('../models/address')
 const ExcelJS = require('exceljs')
-const blobStream = require('blob-stream');
+// const blobStream = require('blob-stream');
 // const PDFDocument = require('pdfkit');
 const PDFDocument  = require('pdfkit-table')
 
 const reportpage = async (req, res) => {
   try {
-
     const dailyOrders = await ordercollection.aggregate([
       {
-        $group: {
+        $group: { 
           _id: { $dateToString: { format: "%Y-%m-%d", date: "$orderdate" } },
           orderCount: { $sum: 1 },
         },
@@ -25,7 +24,7 @@ const reportpage = async (req, res) => {
       (result, order) => {
         result.dates.push(order._id);
         result.orderCounts.push(order.orderCount);
-        result.totalOrderCount += order.orderCount;
+        result.totalOrderCount += order.orderCount; 
         return result;
       },
       { dates: [], orderCounts: [], totalOrderCount: 0 }
