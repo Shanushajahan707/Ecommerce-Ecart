@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Admin Dashboard</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    body {
+      background-color: #f8f9fa;
+    } 
+
+    .sidebar {
+      height: 100%;
+      width: 250px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      background-color: #343a40;
+      padding-top: 20px;
+      overflow-x: hidden;
+    }
+
+    .sidebar a {
+      padding: 10px 20px;
+      text-decoration: none;
+      font-size: 16px;
+      color: white;
+      display: block;
+      transition: 0.3s;
+    }
+
+    .sidebar a:hover {
+      background-color: #495057;
+    }
+
+    .content {
+      margin-left: 260px;
+      padding: 20px;
+    }
+
+    .content h2 {
+      margin-bottom: 20px;
+    }
+
+    .content table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .content table th,
+    .content table td {
+      border: 1px solid #dee2e6;
+      padding: 8px;
+    }
+
+    .content table th {
+      background-color: #343a40;
+      color: white;
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+        padding-top: 15px;
+      }
+
+      .content {
+        margin-left: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+      <span>.</span>
+      <button class="navbar-toggler mt-3 mb-3" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <div class="sidebar">
+          <a href="/admin/salesreport">Dashboard</a>
+          <a href="/admin/adminHome">User Management</a>
+          <a href="/admin/productlist"> Product</a>
+          <a href="/admin/category"> Category</a>
+          <a href="/admin/viewcoupen"> Coupen</a>
+          <a href="/admin/userorders">Show Orders</a>
+          <a href="/admin/productoffers">Product Offer</a>
+          <a href="/admin/logout"><i class="fas fa-sign-out-alt" style="font-size:20px;color:red"></i> Logout</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="content">
+    <h2>User List</h2>
+    <% if(typeof message !=='undefined' ) { %>
+      <div class="alert alert-danger text-center">
+        <%= message %>
+      </div>
+      <% } %>
+      <div class="container mt-4">
+        <div class="table-responsive">
+          <table class="table table-striped">
+            <thead class="bg-primary text-white">
+            <tr>
+              <th>ID</th>
+              <th>Username</th>
+              <th>Email</th>
+              <th>isblocked</th>
+              <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <% users.forEach((user, index)=> { %>
+            <tr>
+              <td><%= index + 1 %></td>
+              <td><%= user.username %></td>
+              <td><%= user.email %></td>
+              <td><%= user.isblocked %></td>
+              <td>
+                <a href="/admin/blockuser/<%= user._id %>">
+                  <button class="btn btn-<%= user.isblocked ? 'success' : 'danger' %>">
+                    <%= user.isblocked ? 'Unblock' : 'Block' %>
+                  </button>
+                </a>
+              </td>
+            </tr>
+            <% }); %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+    integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+    integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
+    crossorigin="anonymous"></script>
+</body>
+
+</html>

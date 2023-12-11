@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Admin Dashboard</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+
+    .sidebar {
+      height: 100%;
+      width: 250px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      background-color: #343a40;
+      padding-top: 20px;
+    }
+
+    .sidebar a {
+      padding: 10px 20px;
+      text-decoration: none;
+      font-size: 16px;
+      /* Adjust the font size here */
+      color: white;
+      display: block;
+      transition: 0.3s;
+    }
+
+
+    .sidebar a:hover {
+      background-color: #495057;
+    }
+
+    .content {
+      margin-left: 260px;
+      padding: 20px;
+    }
+
+    .content h2 {
+      margin-bottom: 20px;
+    }
+
+    .content table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .content table th,
+    .content table td {
+      border: 1px solid #dee2e6;
+      padding: 8px;
+    }
+
+    .content table th {
+      background-color: #343a40;
+      color: white;
+    }
+
+    .custom-popup {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #fff;
+      border: 1px solid #ccc;
+      padding: 20px;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    .custom-popup h2 {
+      margin-top: 0;
+    }
+
+    .popup-buttons {
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    .popup-buttons button {
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      padding: 8px 12px;
+      cursor: pointer;
+      margin: 5px;
+    }
+  </style>
+</head>
+
+<body>
+    <div class="container">
+      <div class="row">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light col-lg-2">
+          <div class="container">
+            <span>.</span>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+              aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+              <div class="sidebar">
+                <a href="/admin/salesreport">Dashboard</a>
+                <a href="/admin/adminHome">User Management</a>
+                <a href="/admin/productlist"> Product</a>
+                <a href="/admin/category"> Category</a>
+                <a href="/admin/viewcoupen"> Coupen</a>
+                <a href="/admin/userorders">Show Orders</a>
+                <a href="/admin/productoffers">Product Offer</a>
+                <a href="/admin/logout"><i class="fas fa-sign-out-alt" style="font-size:20px;color:red"></i> Logout</a>
+              </div>
+            </div>
+          </div>
+      </nav>
+      
+        <div class="container col-lg-9">
+          <h2>User List</h2>
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <% if(typeof message !=='undefined' ) { %>
+                <div class="alert alert-danger text-center">
+                  <%= message %>
+                </div>
+              <% } %>
+              <thead class="bg-primary text-white">
+                <tr>
+                  <th>#</th>
+                  <th>User</th>
+                  <th>Product</th>
+                  <th>Quantity</th>
+                  <th>OrderPlaced</th>
+                  <th>Total</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% if(orders && orders.length > 0) { %>
+                  <% orders.forEach((order, index) => { %>
+                    <% order.productcollection.forEach((product) => { %>
+                      <tr>
+                        <td><%= index+1 %></td>
+                        <td><%= order.username %></td>
+                        <td><%= product.productName %></td>
+                        <td><%= product.quantity %></td>
+                        <td><%= order.orderdate %></td>
+                        <td>₹<%= product.price * product.quantity %></td>
+                        <td>
+                          <form action="/admin/updateorder/<%= order.userid %>/<%= product._id %>" method="post">
+                            <select class="form-select" name="orderstatus">
+                              <% if (product.status === 'Cancelled' ) { %>
+                                <option value="Cancelled" selected>Cancelled</option>
+                              <% } else if(product.status === 'Delivered' ) { %>
+                                <option value="Delivered" selected>Delivered</option>
+                              <% } else { %>
+                                <option value="Pending" <%= product.status === 'Pending' ? 'selected' : '' %>>Pending</option>
+                                <option value="Processing" <%= product.status === 'Processing' ? 'selected' : '' %>>Processing</option>
+                                <option value="Shipped" <%= product.status === 'Shipped' ? 'selected' : '' %>>Shipped</option>
+                                <option value="Delivered" <%= product.status === 'Delivered' ? 'selected' : '' %>>Delivered</option>
+                              <% } %>
+                            </select>
+                        </td>
+                        <td>
+                          <% if (product.status !== 'Cancelled' && product.status !== 'Delivered' ) { %>
+                            <button type="submit" class="btn mb-2 bg-primary">Update</button>
+                            </form>
+                            <a>
+                              <button onclick="confirmDelete('<%= product._id %>')" class="btn cancel-button bg-danger">Cancel</button>
+                            </a>
+                          <% } %>
+                        </td>
+                        </form>
+                      </tr>
+                    <% }) %>
+                  <% }) %>
+                <% } else { %>
+                  <td colspan="7">No Orders Found</td>
+                <% } %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+    integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+    integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
+    crossorigin="anonymous"></script>
+</body>
+
+</html>

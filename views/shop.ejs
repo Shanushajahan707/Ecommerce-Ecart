@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Category List</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <!-- Container wrapper -->
+    <div class="container-fluid mx-3">
+      <!-- Toggle button -->
+      <button class="navbar-toggler" type="button" data-mdb-toggle="collapse" data-mdb-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fas fa-bars"></i>
+      </button>
+
+      <!-- Collapsible wrapper -->
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <!-- Navbar brand -->
+        <a class="navbar-brand mt-2 mt-lg-0" href="/userhome">
+          <!-- <img src="img/[removal.ai]_c4d2c10c-7940-48dc-90a4-b90aa8006f6e-screenshot-2023-10-27-203006.png" style="width: 6vw; height: 9vh;" alt="MDB Logo"
+              loading="lazy" /> -->
+          <h3>E- <span style="color: red;">CART</span></h3>
+        </a>
+        <!-- Left links -->
+        <!-- Left links -->
+      </div>
+      <!-- Collapsible wrapper -->
+
+
+
+      <!-- Avatar -->
+
+      <a class=" d-flex align-items-center " href="/userlogin" id="navbarDropdownMenuAvatar" role="button"
+        data-mdb-toggle="tooltip" title="Login">
+        <i class="fas fa-circle-user " style="font-size: 2em;"></i>
+
+      </a>
+
+    </div>
+
+    <!-- Right elements -->
+    </div>
+    <!-- Container wrapper -->
+  </nav>
+  <div class="container mt-5">
+    <div class="row">
+      <h1 class="text-center">Brand List</h1>
+      <div class="row">
+        <% data.forEach(val => { %>
+          <div class="col-md-4 mb-4">
+            <div class="card">
+              <img src="<%= val.image[0] %>" style="height: 50vh;" class="card-img-top" alt="Category Image">
+              <div class="card-body">
+                <h5 class="card-title">Brand <%= val.Category.Category %></h5>
+                <p class="card-text"><%= val.Productname %></p>
+                <p class="card-text">Price: $<%= val.Price %></p>
+                <p class="card-text">Rating: <%= val.Rating %></p>
+                <div class="d-flex justify-content-between align-items-center">
+                  <a href="/seeproductwithacc/<%= val._id %>" class="btn btn-primary">View More</a>
+                  <a href="/addcart/<%= val._id %>" class="btn btn-info float-end">Add To Cart</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+    </div>
+    <div class="pagination justify-content-center mt-4">
+      <% if (currentPage > 1) { %>
+        <a href="?page=<%= currentPage - 1 %>" class="prev-arrow" aria-label="Previous">
+          <i class="fa fa-long-arrow-left" aria-hidden="true"></i>
+        </a>
+      <% } %>
+      <% for (let i = 1; i <= totalPages; i++) { %>
+        <a href="?page=<%= i %>" class="<%= i === currentPage ? 'active page-link' : 'page-link' %>">
+          <%= i %>
+        </a>
+      <% } %>
+      <% if (currentPage < totalPages) { %>
+        <a href="?page=<%= currentPage + 1 %>" class="next-arrow" aria-label="Next">
+          <i class="fa fa-long-arrow-right" aria-hidden="true"></i>
+        </a>
+      <% } %>
+    </div>
+  </div>
+  
+
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</body>
+
+</html>

@@ -1,0 +1,122 @@
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Address Form</title>
+  <meta name="viewport" content="initial-scale=1">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.0/css/materialize.min.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+
+<body >
+    <nav class="container-fluid navbar navbar-expand-lg navbar-light bg-light mb-4">
+        <div class="container mx-3">
+            <!-- Toggle button -->
+            <button class="navbar-toggler" type="button" data-mdb-toggle="collapse"
+              data-mdb-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+              aria-label="Toggle navigation">
+              <i class="fas fa-bars"></i>
+            </button>
+    
+            <!-- Collapsible wrapper -->
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <!-- Navbar brand -->
+              <a class="navbar-brand mt-2 mt-lg-0" href="#">
+                <!-- <img src="img/[removal.ai]_c4d2c10c-7940-48dc-90a4-b90aa8006f6e-screenshot-2023-10-27-203006.png" style="width: 6vw; height: 9vh;" alt="MDB Logo"
+                loading="lazy" /> -->
+                <h3>E- <span style="color: red;">CART</span></h3>
+              </a>
+              <!-- Left links -->
+              <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                  <a class="nav-link" href="/">Home</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="/categorylist">Shop</a>
+                </li>
+              
+              </ul>
+             <a href=""> <i class="fas fa-heart" style="font-size:3vh;  margin-right: 2rem;"></i></a>
+            <a href="" data-mdb-toggle="tooltip"  data-mdb-placement="bottom" title="Cart">  <i class="fas fa-cart-shopping" style="font-size:3vh; margin-right: 3rem; "></i></a>
+              <form class="d-flex input-group w-auto me-4 ">
+                <input type="search " class="form-control rounded" placeholder="Search Products" aria-label="Search"
+                  aria-describedby="search-addon" />
+    
+              </form>
+              <!-- Left links -->
+            </div>
+            <!-- Collapsible wrapper -->
+            <!-- Avatar -->
+            </div>
+            
+            
+            
+            <!-- </a>
+            <a href="/logout" ><button class="btn btn-info">Logout</button></a>
+          </div> -->
+    
+          <!-- Right elements -->
+      </nav>
+  <h1 class="ms-5">Address</h1>
+  <div class="row container ms-5">
+    <form class="col s12" action="/addaddress" method="post">
+      <div class="row">
+        <div class="input-field col s12 m12 l6">
+          <input id="first_name" name="firstname" type="text" required class="validate" pattern="^\S.{1,23}\S$" title="Please enter a first Name between 3-25 characters" length="25">
+          <label for="first_name">First Name</label>
+        </div>
+        <div class="input-field col s12 m12 l6">
+          <input id="last_name"name="lastname" type="text" required class="validate" pattern="^\S.{1,23}\S$" title="Please enter a last Name between 3-25 characters" length="25">
+          <label for="last_name">Last Name</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="input-field col s12 m12 l6">
+          <input id="address"name="address" type="text" required class="validate" pattern="^\S.+" title="Please enter a valid address">
+          <label for="address">Address</label>
+        </div>
+        <div class="input-field col s12 m12 l6">
+          <input id="town"name="city" type="text" required class="validate" title="Please enter a valid City/Town" pattern="^\S.+">
+          <label for="town">City/Town</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col s12 m12 l6">
+          <label for="state">State</label>
+          <select id="state" class="browser-default" name="state" required title="Please select a state" aria-placeholder="Select a State">
+            <option value="ar-us">Kerala</option>
+            <option value="ny-us">TamilNadu</option>
+            <option value="ca-us">California</option>
+          </select>
+        </div>
+        <div class="input-field col s12 m12 l6">
+          <input name="pincode" id="zip-code" type="text" maxlength="6" required title="Please enter a valid post code
+(e.g., 12345)" pattern="^\d{6}(-\d{4})?$" class="validate">
+          <label for="zip-code">Pin Code</label>
+        </div>
+      </div>
+      <div class="row">
+        <!-- <div class="input-field col s12 m12 l6">
+          <i class="material-icons prefix">email</i>
+          <input id="email" type="email" required class="validate" title="Please enter a valid email">
+          <label for="email">Email</label>
+        </div> -->
+        <div class="input-field col s12 m12 l6">
+          <i class="material-icons prefix">contact_phone</i>
+          <input id="phone-number" name="phone" type="tel" maxlength="10" required title="Please enter a valid phone number (e.g., 1234567890)" pattern="^[0-9]?\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$" class="validate">
+          <label for="phone-number">Phone Number</label>
+        </div>
+      </div>
+      <button class="waves-effect waves-light btn right" type="submit">Submit</button>
+    </form>
+  </div>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.0/js/materialize.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+
+</body>
+
+</html>

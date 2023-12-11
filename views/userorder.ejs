@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+        }
+
+        #sidebar {
+            height: 100%;
+            width: 10rem;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            background-color: #111;
+            padding-top: 20px;
+        }
+
+        #sidebar a {
+            padding: 8px 8px 8px 32px;
+            text-decoration: none;
+            font-size: 18px;
+            color: #818181;
+            display: block;
+            transition: 0.3s;
+        }
+
+        #sidebar a:hover {
+            color: #f1f1f1;
+        }
+
+        #main {
+            margin-left: 250px;
+            /* Adjust this value to match the width of your sidebar */
+            padding: 16px;
+        }
+
+        .order-details {
+            margin: 20px 0;
+        }
+
+        .order-details h4 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        .order-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .order-table th,
+        .order-table td {
+            padding: 8px 12px;
+            text-align: left;
+            border: 1px solid #ccc;
+        }
+
+        .order-table th {
+            background-color: #f0f0f0;
+            font-weight: bold;
+        }
+
+        .order-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .cancel-button {
+            background-color: #ff5555;
+            color: #ffffff;
+            border: none;
+            padding: 8px 16px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .popup {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .close-btn {
+            cursor: pointer;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+        }
+
+        .custom-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            border: 1px solid #ccc;
+            padding: 20px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .custom-popup h2 {
+            margin-top: 0;
+        }
+
+        .popup-buttons {
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .popup-buttons button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            padding: 8px 12px;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+        .custom-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            border: 1px solid #ccc;
+            padding: 20px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .custom-popup h2 {
+            margin-top: 0;
+        }
+
+        .popup-buttons {
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .popup-buttons button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            padding: 8px 12px;
+            cursor: pointer;
+            margin: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <nav class="navbar navbar-expand-md navbar-light bg-light ">
+            <div class="container-fluid">
+                <h3>E- <span style="color: red;">CART</span></h3>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <div id="sidebar" class="col-sm-4">
+                        <a href="/userprofile" class="nav-link"><i class="fas fa-user"></i> Profile</a>
+                        <a href="/viewaddress" class="nav-link"><i class="fas fa-address-book"></i> Address</a>
+                        <a href="/orders" class="nav-link"><i class="fas fa-shopping-cart"></i> Orders</a>
+                        <a href="/" class="nav-link"><i class="fas fa-shopping-bag"></i> Shop</a>
+                        <a href="#" onclick="confirmLogout()" class="nav-link"><i class="fas fa-sign-out-alt"></i>
+                            Logout</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <section class="order-details col-lg-10 mx-auto ">
+          
+            <div class="table-container">
+                <table class="order-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>ProductName</th>
+                            <th>Total Amount</th>
+                            <th>Total Quantity</th>
+                            <th>OrderDate</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                            <th>More</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if (userorders && userorders.length > 0) { %>
+                            <% userorders.forEach((order, index) => { %>
+                                <% order.productcollection.forEach((product) => { %>
+                                    <tr>
+                                        <td><%= index + 1 %></td>
+                                        <td><%= product.productName %></td>
+                                        <td>₹<%= product.price * product.quantity %></td>
+                                        <td><%= order.orderdate%></td>
+                                        <td><%= product.quantity %></td>
+                                        <td><%= product.status %></td>
+                                        <td>
+                                            <% if (product.status !== "Cancelled" && product.status !== "Returned") { %>
+                                                <% if (product.status === "Delivered") { %>
+                                                    <a href="/submit-return/<%= product._id %>">
+                                                        <button class="btn btn-success">Return</button>
+                                                    </a>
+                                                <% } else { %>
+                                                    <button class="btn btn-danger" onclick="confirmCancel('<%= product._id %>')">Cancel</button>
+                                                <% } %>
+                                            <% } %>
+                                        </td>
+                                        <td>
+                                            <a href="/viewordermore/<%= order._id %>/<%= product._id %>">
+                                                <button class="btn btn-info">View More</button>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                <% }) %>
+                            <% }) %>
+                        <% } else { %>
+                            <tr>
+                                <td colspan="7">No orders available</td>
+                            </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+            
+        </section>
+
+
+        <div id="custom-popup2" class="custom-popup">
+            <h2>Are you sure you want to Cancel?</h2>
+            <div class="popup-buttons">
+                <button id="delete-button" class="btn btn-danger">Yes</button>
+                <button id="cancel-button" class="btn btn-secondary">Cancel</button>
+            </div>
+        </div>
+        <div id="custom-popup" class="custom-popup">
+            <h2>Are you sure you want to Logout?</h2>
+            <div class="popup-buttons">
+                <button id="logout-button" class="btn btn-danger">Yes</button>
+                <button id="cancel2-button" class="btn btn-secondary">Cancel</button>
+            </div>
+        </div>
+
+    </div>
+
+
+
+
+    <script>
+        function confirmCancel(orderid) {
+            var popup = document.getElementById('custom-popup2');
+            popup.style.display = 'block';
+
+            document.getElementById('delete-button').addEventListener('click', function () {
+                window.location.href = '/cancelorder/' + orderid;
+            });
+
+            document.getElementById('cancel-button').addEventListener('click', function () {
+                popup.style.display = 'none';
+            });
+        }
+    </script>
+    <script>
+        function confirmLogout() {
+            var popup = document.getElementById('custom-popup');
+            popup.style.display = 'block';
+
+            document.getElementById('logout-button').addEventListener('click', function () {
+                window.location.href = '/logout'
+            });
+
+            document.getElementById('cancel2-button').addEventListener('click', function () {
+                popup.style.display = 'none';
+            });
+        }
+    </script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <!-- Include Bootstrap CSS and JS (for modal) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>

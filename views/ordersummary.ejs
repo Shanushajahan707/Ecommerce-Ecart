@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Summary</title>
+    <link rel="icon" href="img/mdb-favicon.ico" type="image/x-icon" />
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <link rel="stylesheet" href="/style/mdb.min.css" />
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <style>
+        body {
+            background-color: #f8f9fa;
+            /* Light gray background */
+        }
+
+        .order-summary {
+            background-color: #ffffff;
+            /* White background for order summary */
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        .order-summary h2 {
+            color: #343a40;
+            /* Dark gray text color */
+        }
+
+        .form-group label {
+            font-weight: bold;
+        }
+
+        .btn-place-order {
+            background-color: #007bff;
+            /* Blue button color */
+            border: none;
+            transition: background-color 0.3s;
+        }
+
+        .btn-place-order:hover {
+            background-color: #0056b3;
+            /* Darker blue on hover */
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <body>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light ">
+            <!-- Container wrapper -->
+            <div class="container-fluid mx-3">
+                <!-- Toggle button -->
+                <button class="navbar-toggler" type="button" data-mdb-toggle="collapse"
+                    data-mdb-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                    <i class="fas fa-bars"></i>
+                </button>
+
+                <!-- Collapsible wrapper -->
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <!-- Navbar brand -->
+                    <a class="navbar-brand mt-2 mt-lg-0" href="#">
+                        <!-- <img src="img/[removal.ai]_c4d2c10c-7940-48dc-90a4-b90aa8006f6e-screenshot-2023-10-27-203006.png" style="width: 6vw; height: 9vh;" alt="MDB Logo"
+                  loading="lazy" /> -->
+                        <h3>E- <span style="color: red;">CART</span></h3>
+                    </a>
+                    <!-- Left links -->
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/">Home</a>
+                        </li>
+
+                        <!-- Left links -->
+                </div>
+
+                <!-- </a>
+              
+            </div> -->
+
+                <!-- Right elements -->
+            </div>
+            <!-- Container wrapper -->
+        </nav>
+        <section class="order-summary mt-5">
+            <div style="background-color: #f0f0f0; padding: 10px; margin: 10px; border-radius: 5px;">
+                <% if(usercart) { %>
+                    <% usercart.forEach(cart=> { %>
+                        <p style="margin: 5px 0;">
+                            <img style="width: 5vw;height: 15vh;" src="<%= cart.image[0] %>">
+                            <span style="font-weight: bold;">Product:</span>
+                            <%= cart.product %>
+                                <span style="margin-left: 10px; font-weight: bold;">Price:</span>
+                                <%= cart.price %>
+                                    <span style="margin-left: 10px; font-weight: bold;">Quantity:</span>
+                                    <%= cart.quantity %>
+                        </p>
+                        <% }) %>
+                            <% } %>
+            </div>
+            <div class="container">
+                <h2 class="text-center mb-4">Order Summary</h2>
+
+
+                <!-- Row for Total Quantity -->
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <label for="total-quantity">Total Quantity</label>
+                            <input type="text" class="form-control" id="total-quantity" disabled
+                                value="<%= totalQuantity %>">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Row for Payment Method and Shipping Address -->
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <form action="/orderdata" method="post" name="placeorder-form">
+                                <label for="payment-options">Payment Method</label>
+                                <% if(useraddress && useraddress.length> 0) { %>
+                                    <select class="form-control" id="payment-options" name="paymentmode">
+                                        <option value="cash-on-delivery">Cash On Delivery</option>
+                                        <option value="net-banking">Net Banking</option>
+                                        <option value="Wallet">Wallet</option>
+                                    </select>
+                                    <%}%>
+                        </div> 
+                    </div>
+                    <div class="col-lg-4">
+
+                        <div class="form-group">
+                            <% if(useraddress && useraddress.length> 0) { %>
+                                <fieldset id="shippingAddressFieldset">
+                                    <legend>Shipping Address</legend>
+                                    <% useraddress.forEach((address)=> { %>
+                                        <label>
+                                            <input type="radio" name="selectedaddress" value="<%= address._id %>"
+                                                checked>
+                                            <div class="address-option">
+                                                <div class="name">
+                                                    <%= address.firstname %>
+                                                        <%= address.lastname %>
+                                                </div>
+                                                <div class="address">
+                                                    <%= address.address %>
+                                                </div>
+                                                <div class="city-pin">
+                                                    <%= address.city %>, <%= address.pincode %>
+                                                </div>
+                                                <div class="phone">
+                                                    <%= address.phone %>
+                                                </div>
+                                            </div>
+                                        </label>
+                                        <% }) %>
+                                </fieldset>
+                                <% } else { %>
+                                    <p>You don't have a shipping address. Please add an address <a
+                                            href="/userprofile">here</a>.</p>
+                                    <% } %>
+                        </div>
+
+                    </div>
+                    <div class="col-lg-4">
+                        <h5>Total Price: <span id="total-price">
+                                <% totalPrice=0; %>
+                                    <% for (let i=0; i < usercart.length; i++) { %>
+                                        <% const itemPrice=parseFloat(usercart[i].price); %>
+                                            <% if (!isNaN(itemPrice)) { %>
+                                                <% totalPrice +=usercart[i].quantity * itemPrice; %>
+                                                    <% } %>
+                                                        <% } %>
+                                                            ₹<%= totalPrice.toFixed(2) %>
+                            </span></h5>
+                      
+                                <div class="input-group">
+                                    <input id="coupencode" name="coupencode" type="text" class="form-control"
+                                        placeholder="Enter the code">
+                                    <button id="coupenbtn" type="button" class="btn btn-info"
+                                        onclick="applyCoupon('<%= totalPrice %>')">Apply Now</button>
+                                </div>
+                                <div id="messageContainer"></div>
+                                <h5>Wallet Amount: <span id="wallet-amount">₹<%= walletAmount.toFixed(2) %></span> <i
+                                        class="fas fa-wallet"></i></h5>
+                                        <% if (usercart && usercart.length> 0) { %>
+
+                                            <h5 class="text-danger">Discount: ₹ <span id="discountValue">0.00</span></h5>
+                                            <h5>Total Price: <span id="total-price2">
+                                                    <% totalPrice=0; %>
+                                                        <% for (let i=0; i < usercart.length; i++) { %>
+                                                            <% const itemPrice=parseFloat(usercart[i].price); %>
+                                                                <% if (!isNaN(itemPrice)) { %>
+                                                                    <% totalPrice +=usercart[i].quantity * itemPrice; %>
+                                                                        <% } %>
+                                                                            <% } %>
+                                                                                ₹<%= totalPrice.toFixed(2) %>
+                                                </span></h5>
+                                            <% } %>
+                
+
+
+                    </div>
+                    <div class="text-center mt-4 ">
+                        <% let totalprice %>
+                            <% if(usercart && usercart.length> 0) { %>
+                                <h5>Total Price: <span id="total-price3">
+                                        <% totalPrice=0; %>
+                                            <% for (let i=0; i < usercart.length; i++) { %>
+                                                <% const itemPrice=parseFloat(usercart[i].price); %>
+                                                    <% if (!isNaN(itemPrice)) { %>
+                                                        <% totalPrice +=usercart[i].quantity * itemPrice; %>
+                                                            <% } %>
+                                                                <% } %>
+                                                                    ₹<%= totalPrice.toFixed(2) %>
+                                    </span></h5>
+                                <% } else { %>
+                                    <h4>Total Price: ₹ <span id="total-price">0.00</span></h4>
+                                    <% } %>
+                                        <% if(useraddress && useraddress.length> 0) { %>
+
+                                            <button id="placeorder" class="btn btn-primary  btn-place-order"
+                                                type="submit">Place
+                                                Order</button>
+
+
+
+                                            </form>
+                                            <button id="wallet" class="btn btn-primary  btn-place-order">Wallet</button>
+                                            <div id="msgbox"></div>
+
+                                            <div id="payNowButton" class="hidden">
+                                                <button id="rzp-button1" class="btn btn-primary" type="submit">Pay
+                                                    with
+                                                    Razorpay</button>
+                                                <% } %>
+                                            </div>
+
+                                            <span id="price" data-totalprice="<%= totalPrice %>"></span>
+
+
+                    </div>
+
+
+                </div>
+            </div>
+
+
+
+
+            </div>
+
+        </section>
+
+        <!-- Your EJS script -->
+        <script>
+            let alreadyUsedCoupon = false;
+            let overallTotalPrice; // Declare a global variable to store the overall total price
+            async function applyCoupon(totalPrice) {
+                const messageContainer = document.getElementById('messageContainer');
+                if (alreadyUsedCoupon) {
+                    messageContainer.textContent = 'Coupon already applied.';
+                    return;
+                }
+                const coupencode = document.getElementsByName('coupencode')[0].value;
+                try {
+                    const response = await fetch('/coupencheck', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ coupencode }),
+                    });
+                    if (!response.ok) {
+                        messageContainer.textContent = `already use a coupen`;
+                        setTimeout(() => {
+                            messageContainer.textContent = ""
+                        }, 2000);
+                        return;
+                    }
+                    const data = await response.json();
+                    if (data.success) {
+                        if (data.success) {
+                            const discountValue = data.discount || 0;
+                            const amountLimit = data.amount || 0;
+
+                            // Check if the total amount is greater than the discount
+                            if (totalPrice > discountValue) {
+                                if (totalPrice >= amountLimit) {
+                                    messageContainer.textContent = 'Coupon code is valid and not expired.';
+                                    setTimeout(() => {
+                                        messageContainer.textContent = "";
+                                    }, 2000);
+                                    overallTotalPrice = totalPrice - discountValue; // Update the global variable
+                                    document.getElementById('discountValue').textContent = discountValue.toFixed(2);
+                                    document.getElementById('total-price2').textContent = `₹${overallTotalPrice.toFixed(2)}`;
+                                    document.getElementById('total-price3').textContent = `₹${overallTotalPrice.toFixed(2)}`;
+                                    alreadyUsedCoupon = true;
+                                } else {
+                                    messageContainer.textContent = 'Your purchase amount is not greater than the coupon purchase amount. You are not eligible for this coupon.';
+                                    setTimeout(() => {
+                                        messageContainer.textContent = "";
+                                    }, 4000);
+                                }
+                            } else {
+                                messageContainer.textContent = 'Coupon code is either expired or invalid: ' + data.message;
+                                setTimeout(() => {
+                                    messageContainer.textContent = "";
+                                }, 4000);
+                            }
+                        } else {
+                            messageContainer.textContent = `Failed to apply coupon: `;
+                            setTimeout(() => {
+                                messageContainer.textContent = "";
+                            }, 4000);
+                            return;
+                        }
+                    }
+                } catch (error) {
+                    messageContainer.textContent = `Error applying coupon: ${error.message}`;
+                    console.error('Error applying coupon:', error);
+                }
+            }
+            //razorpay integration
+
+            let orderId;
+            let price = document.getElementById('price')
+            let orderprice = price.getAttribute('data-totalprice')
+            // var productPrice = <%=JSON.stringify(totalprice)%> 
+            $(document).ready(function () {
+                var settings = {
+                    "url": "/create/orderId",
+                    "method": "POST",
+                    "timeout": 0,
+                    "headers": {
+                        "Content-Type": "application/json"
+                    },
+                    "data": JSON.stringify({
+                        "amount": (overallTotalPrice || orderprice) * 100
+                    }),
+                };
+
+                //creates new orderId everytime
+                $.ajax(settings).done(function (response) {
+                    orderId = response.orderId;
+                    orderprice = response.orderprice; // Assign response.orderprice to orderprice
+                    ordresignature = response.signature
+                    console.log(orderId);
+                    $("#rzp-button1").show();
+                });
+            });
+            console.log("price is", orderprice);
+            console.log("price is", overallTotalPrice);
+            document.getElementById('rzp-button1').onclick = function (e) {
+                var options = {
+                    "key": "rzp_test_I5igMZcnHQiPyk",
+                    "amount": (overallTotalPrice || orderprice) * 100,
+                    "currency": "INR",
+                    "name": "E-CART",
+                    "description": "Online Payment",
+                    "image": "\img\logo.png",
+                    "order_id": orderId,
+                    "handler": function (response) {
+                        // Create a form dynamically
+                        var form = document.createElement('form');
+                        form.method = 'post';
+                        form.action = '/orderdata';  // Replace with the URL you want to redirect to
+                        // Create an input element to hold the payment ID
+                        var paymentIdInput = document.createElement('input');
+                        paymentIdInput.type = 'hidden';
+                        paymentIdInput.name = 'razorpay_payment_id';
+                        paymentIdInput.value = response.razorpay_payment_id;
+                        // Add the input element to the form
+                        form.appendChild(paymentIdInput);
+                        // Add hidden input fields for payment mode and address details
+                        var paymentModeInput = document.createElement('input');
+                        paymentModeInput.type = 'hidden';
+                        paymentModeInput.name = 'paymentmode';
+                        paymentModeInput.value = document.getElementById('payment-options').value; // Assumes the payment mode is selected through a dropdown
+                        form.appendChild(paymentModeInput);
+                        coupencode.value = document.getElementById('coupencode').value; // Assumes the payment mode is selected through a dropdown
+                        form.appendChild(coupencode);
+                        var selectedAddressInput = document.querySelector('input[name="selectedaddress"]:checked');
+                        if (selectedAddressInput) {
+                            var addressIdInput = document.createElement('input');
+                            addressIdInput.type = 'hidden';
+                            addressIdInput.name = 'selectedaddress';
+                            addressIdInput.value = selectedAddressInput.value;
+                            form.appendChild(addressIdInput);
+                        }
+                        // Append the form to the body
+                        document.body.appendChild(form);      // Submit the form
+                        form.submit();
+                    }
+                };
+                var rzp1 = new Razorpay(options);
+                rzp1.on('payment.failed', function (response) {
+                    alert(response.error.code);
+                    alert(response.error.description);
+                    alert(response.error.source);
+                    alert(response.error.step);
+                    alert(response.error.reason);
+                    alert(response.error.metadata.order_id);
+                    alert(response.error.metadata.payment_id);
+                });
+                rzp1.open();
+                e.preventDefault();
+            }
+        </script>
+
+        <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+        <script>
+    document.getElementById('wallet').addEventListener('click', async () => {
+        try {
+            const selectedAddress = document.querySelector('input[name="selectedaddress"]:checked').value;
+            const paymentMode = document.getElementById('payment-options').value;
+            const coupencode=document.getElementById('coupencode').value;
+            const totalOverallPrice = parseFloat(document.getElementById('total-price3').innerText.replace('₹', ''));
+            const walletAmount = parseFloat(document.getElementById('wallet-amount').innerText.replace('₹', ''));
+
+            if (totalOverallPrice > walletAmount) {
+                msgbox.textContent = `Wallet is not enough for this purchase: `;
+                setTimeout(() => {
+                    messageContainer.textContent = "";
+                }, 4000);
+                return;
+            } else {
+                const response = await fetch('/placeOrderWithWallet', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        selectedAddress,
+                        paymentMode,
+                        totalOverallPrice,
+                        coupencode
+                    }),
+                });
+
+                if (response.ok) {
+                    const popupHTML = await response.text(); // Assuming the server responds with HTML content for the popup
+                    document.body.insertAdjacentHTML('beforeend', popupHTML);
+
+                    // Now you can include your popup show/hide logic
+                    setTimeout(() => {
+                        // Logic to show/hide the popup
+                        window.location.href = '/userhome'; // Redirect after 3 seconds
+                    }, 1000);
+                } else {
+                    console.error('Server responded with an error:', response.status);
+                    alert('An error occurred during the request');
+                }
+            }
+        } catch (error) {
+            console.error('Error during fetch:', error);
+            alert('An error occurred during the request');
+        }
+    });
+</script>
+
+
+
+        <!-- Scripts -->
+        <script>
+            $(document).ready(function () {
+                $('#wallet').addClass('hidden'); // Hide the "Wallet" button initially
+                $('#payNowButton').addClass('hidden'); // Hide the "Pay Now" button initially
+
+                $('#payment-options').change(function () {
+                    if ($(this).val() === 'net-banking') {
+                        // Hide "Place Order" button and show "Pay Now" button
+                        $('#payNowButton').removeClass('hidden');
+                        $('#placeorder').addClass('hidden');
+                        $('#wallet').addClass('hidden'); // Hide the "Wallet" button
+                    } else if ($(this).val() === 'Wallet') {
+                        // Hide "Place Order" button and show "Wallet" button
+                        $('#wallet').removeClass('hidden');
+                        $('#placeorder').addClass('hidden');
+                        $('#payNowButton').addClass('hidden'); // Hide the "Pay Now" button
+                    } else {
+                        // Show "Place Order" button and hide "Pay Now" and "Wallet" buttons
+                        $('#payNowButton').addClass('hidden');
+                        $('#wallet').addClass('hidden');
+                        $('#placeorder').removeClass('hidden');
+                    }
+                });
+            });
+        </script>
+        <!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script> -->
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    </body>
+
+</html>

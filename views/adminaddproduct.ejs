@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Add user</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+  integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f8f9fa;
+    }
+
+    .sidebar {
+      position: fixed;
+      left: 0;
+      top: 0;
+      height: 100%;
+      width: 250px;
+      background-color: #343a40;
+      padding-top: 20px;
+      padding-bottom: 20px;
+    }
+
+    .sidebar a {
+      padding: 10px 20px;
+      text-decoration: none;
+      font-size: 16px;
+      color: white;
+      display: block;
+      transition: 0.3s;
+    }
+
+    .sidebar a:hover {
+      background-color: #495057;
+    }
+
+    /* .main-content {
+      margin-left: 260px;
+      padding: 20px;
+    } */
+
+    .main-content h2 {
+      margin-bottom: 20px;
+    }
+
+    .form-label {
+      font-weight: bold;
+    }
+
+    .btn-submit {
+      background-color: #28a745;
+      border: none;
+    }
+
+    .btn-submit:hover {
+      background-color: #218838;
+    }
+
+    .custom-popup {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.5);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .popup-content {
+      background-color: #fefefe;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      text-align: center;
+    }
+
+    button {
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .error-message {
+      color: red;
+      display: none;
+    }
+
+    #cropper-container {
+      margin: 3rem;
+    }
+
+    .image-container {
+      display: inline-block;
+      margin-right: 10px;
+    }
+
+    .image-container img {
+      max-width: 100%;
+      height: auto;
+    }
+
+    .remove-button {
+      display: block;
+      margin-top: 5px;
+      cursor: pointer;
+      color: red;
+      color: aliceblue;
+      width: 16vh;
+    }
+
+
+
+    .save-button {
+      display: block;
+      /* margin:5rem; */
+      width: 16vh;
+
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container-fluid">
+    <div class="row">
+      <nav class="navbar navbar-expand-lg navbar-light bg-light col-lg-2">
+        <span>.</span>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <div class="sidebar">
+            <a href="/admin/salesreport">Dashboard</a>
+            <a href="/admin/adminHome">User Management</a>
+            <a href="/admin/productlist"> Product</a>
+            <a href="/admin/category"> Category</a>
+            <a href="/admin/viewcoupen"> Coupen</a>
+            <a href="/admin/userorders">Show Orders</a>
+            <a href="/admin/productoffers">Product Offer</a>
+            <a href="/admin/logout"><i class="fas fa-sign-out-alt" style="font-size:20px;color:red"></i> Logout</a>
+          </div>
+        </div>
+      </nav>
+      <div class="col-lg-9">
+        <h2 class="mt-3">Add Product</h2>
+        <% if(typeof message !=='undefined' ) { %>
+          <div id="customPopup" class="custom-popup col-md-12">
+            <div class="popup-content">
+              <p>
+                <%= message %>
+              </p>
+              <button id="cancelButton" class="btn btn-secondary">Cancel</button>
+            </div>
+          </div>
+          <script>
+            document.getElementById('customPopup').style.display = 'block';
+            document.getElementById('cancelButton').addEventListener('click', function () {
+              document.getElementById('customPopup').style.display = 'none';
+            });
+          </script>
+          <% } %>
+
+            <form class="mt-5" action="/admin/addproduct" method="post" enctype="multipart/form-data">
+              <div class="form-group">
+                <label for="UrunID">Product Name</label>
+                <input name="productname" type="text" class="form-control" id="UrunID">
+                <span id="productname-error" class="error-message">Product Name is required</span>
+              </div>
+
+              <div class="form-group">
+                <label for="UrunMiktar">Brands</label>
+                <select name="category" class="form-select" id="UrunMiktar">
+                  <% categories.forEach(category=> { %>
+                    <option value="<%= category._id %>">
+                      <%= category.Category %>
+                    </option>
+                    <% }); %>
+                </select>
+                <span id="category-error" class="error-message">Category is required</span>
+              </div>
+
+              <div class="form-group">
+                <label for="UrunMiktar">Price</label>
+                <input name="price" min="1" type="number" class="form-control" id="UrunMiktar">
+                <span id="price-error" class="error-message">Price is required</span>
+              </div>
+
+              <div class="form-group">
+                <label for="UrunMiktar">Rating</label>
+                <input name="rating" min="1" type="number" class="form-control" id="UrunMiktar">
+                <span id="rating-error" class="error-message">Rating is required</span>
+              </div>
+
+              <div class="form-group">
+                <label for="UrunMiktar">Model</label>
+                <input name="model" type="text" class="form-control" id="UrunMiktar">
+                <span id="model-error" class="error-message">Model is required</span>
+              </div>
+
+              <div class="form-group">
+                <label for="UrunMiktar">Stock</label>
+                <input name="stock" min="1" type="number" class="form-control" id="UrunMiktar">
+                <span id="stock-error" class="error-message">Stock is required</span>
+              </div>
+
+              <div class="form-group">
+                <label for="UrunMiktar">Description</label>
+                <input name="description" type="text" class="form-control" id="UrunMiktar">
+                <span id="description-error" class="error-message">Description is required</span>
+              </div>
+
+              <div class="form-group">
+                <label for="UrunImage">Product Images</label>
+                <input name="img" accept="image/*" id="image" type="file" class="form-control" multiple>
+                <div class="container d-flex">
+                  <div id="image-container" class="mt-5 ms-5 mb-5"></div>
+                  <div id="cropper-container" class="mt-3 mb-5"></div>
+                </div>
+              </div>
+
+              <div class="d-flex justify-content-center">
+                <button type="submit"
+                  class="btn btn-success text-white btn-outline-success form-control w-50 m-3 btn-submit">
+                  Add Stock
+                </button>
+              </div>
+            </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      document.querySelector('form').addEventListener('submit', function (event) {
+        var requiredFields = ['productname', 'category', 'price', 'rating', 'model', 'stock', 'description'];
+
+        var errorMessages = {};
+
+        requiredFields.forEach(function (fieldName) {
+          var input = document.querySelector(`[name="${fieldName}"]`);
+          var errorMessage = document.querySelector(`#${fieldName}-error`);
+          errorMessages[fieldName] = errorMessage;
+
+          // Reset error messages
+          errorMessage.style.display = 'none';
+
+          // Check if the field is empty
+          if (input.value.trim() === '') {
+            errorMessage.style.display = 'block';
+            event.preventDefault(); // Prevent form submission
+          }
+        });
+      });
+    });
+  </script>
+
+
+
+
+  <!-- for cropp and preview -->
+
+
+  <script>
+    const imageContainer = document.getElementById('image-container');
+    let croppers = [];
+    let croppedImagesData = []; // Array to store cropped image data
+
+    document.getElementById('image').addEventListener('change', (event) => {
+      const files = event.target.files;
+
+      for (const file of files) {
+        const reader = new FileReader();
+
+        reader.onload = (event) => {
+          const image = new Image();
+          image.src = event.target.result;
+
+          image.onload = () => {
+            const containerDiv = document.createElement('div');
+            containerDiv.className = 'image-container';
+
+            const imageElement = document.createElement('img');
+            imageElement.src = image.src;
+            containerDiv.appendChild(imageElement);
+
+            // Set a fixed height for the container
+            containerDiv.style.height = '150px';
+
+            // Create a new Cropper for each image without a fixed aspect ratio
+            const cropper = new Cropper(imageElement, {
+              aspectRatio: NaN, // Allow freeform cropping
+              viewMode: 1, // Set the cropping mode (0: freeform, 1: restrict to the aspect ratio)
+            });
+
+            // Create a "Save" button for each image
+            const saveButton = document.createElement('button');
+            saveButton.className = 'btn btn-success save-button';
+            saveButton.textContent = 'Save';
+            saveButton.addEventListener('click', () => {
+              // Get the cropped image data for the specific cropper
+              const croppedCanvas = cropper.getCroppedCanvas();
+              const croppedImageData = croppedCanvas.toDataURL('image/jpeg');
+
+              // Store cropped image data in the array
+              croppedImagesData.push(croppedImageData);
+
+              // Optionally, you can remove the "Save" button after saving
+              containerDiv.removeChild(saveButton);
+            });
+            // Create a "Remove" button for each image
+            const removeButton = document.createElement('button');
+            removeButton.className = 'btn btn-danger remove-button';
+            removeButton.textContent = 'Remove';
+            removeButton.addEventListener('click', () => {
+              // Remove the corresponding image and cropper
+              const index = croppers.indexOf(cropper);
+              if (index !== -1) {
+                croppers.splice(index, 1);
+                croppedImagesData.splice(index, 1);
+              }
+              containerDiv.remove();
+            });
+
+            containerDiv.appendChild(saveButton);
+            containerDiv.appendChild(removeButton);
+
+            imageContainer.appendChild(containerDiv);
+            croppers.push(cropper);
+          };
+        };
+
+        reader.readAsDataURL(file);
+      }
+    });
+
+    // Handle form submission (for adding product)
+    document.querySelector('form').addEventListener('submit', async (event) => {
+      // Add the cropped image data to the form data
+      croppedImagesData.forEach((croppedImageData, index) => {
+        const hiddenInput = document.createElement('input');
+        hiddenInput.type = 'hidden';
+        hiddenInput.name = `croppedImages[${index}]`;
+        hiddenInput.value = croppedImageData;
+        document.querySelector('form').appendChild(hiddenInput);
+      });
+
+    });
+
+
+  </script>
+
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+        integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
+        crossorigin="anonymous"></script>
+        
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+    integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+    integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
+    crossorigin="anonymous"></script>
+</body>
+
+</html>

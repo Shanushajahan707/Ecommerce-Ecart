@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+        }
+
+        #sidebar {
+            height: 100%;
+            width: 10rem;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            background-color: #111;
+            padding-top: 20px;
+        }
+
+        #sidebar a {
+            padding: 8px 8px 8px 32px;
+            text-decoration: none;
+            font-size: 18px;
+            color: #818181;
+            display: block;
+            transition: 0.3s;
+        }
+
+        #sidebar a:hover {
+            color: #f1f1f1;
+        }
+
+        #main {
+            margin-left: 250px;
+            /* Adjust this value to match the width of your sidebar */
+            padding: 16px;
+        }
+
+        .address-card {
+            background-color: #fff;
+            border: 1px solid #e0e0e0;
+            padding: 20px;
+            margin: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s;
+        }
+
+        .address-card:hover {
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .address-card p {
+            margin: 0;
+            font-size: 16px;
+            color: #333;
+        }
+
+        /* Updated Add Address Button Styles */
+        #add-address-btn {
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            padding: 12px 24px;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: background-color 0.3s;
+        }
+
+        #add-address-btn:hover {
+            background-color: #2980b9;
+        }
+
+        /* Animation Styles */
+        .loading {
+            display: none;
+            text-align: center;
+            margin-top: 50px;
+            font-size: 18px;
+            color: #555;
+        }
+
+        .btn-animate .loader {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: none;
+            color: #3498db;
+        }
+
+        .custom-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            border: 1px solid #ccc;
+            padding: 20px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .custom-popup h2 {
+            margin-top: 0;
+        }
+
+        .popup-buttons {
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .popup-buttons button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            padding: 8px 12px;
+            cursor: pointer;
+            margin: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <nav class="navbar navbar-expand-md navbar-light bg-light col-lg-3" style="position: relative;">
+            <div class="container-fluid">
+                <h3>E- <span style="color: red;">CART</span></h3>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <div id="sidebar" class="col-sm-4">
+                        <a href="/userprofile" class="nav-link"><i class="fas fa-user"></i> Profile</a>
+                        <a href="/viewaddress" class="nav-link"><i class="fas fa-address-book"></i> Address</a>
+                        <a href="/orders" class="nav-link"><i class="fas fa-shopping-cart"></i> Orders</a>
+                        <a href="/" class="nav-link"><i class="fas fa-shopping-bag"></i> Shop</a>
+                        <a href="#" onclick="confirm()" class="nav-link"><i class="fas fa-sign-out-alt"></i>
+                            Logout</a>
+                    </div>
+                </div>
+            </div>  
+        </nav>
+
+        <div class="container-fluid col-lg-9">
+            <div class="row">
+                <div class="col-md-8 col-lg-10 mx-auto col-sm-6 col-xm-6">
+                    <div class="custom-border maindiv p-5">
+                        <div class="container">
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <h1 class="mb-0 text-primary">Address</h1>
+                                <a href="/addaddress" class="btn btn-primary">Add Address</a>
+                            </div>
+                            <br>
+                            <!-- User Information -->
+                            <% if(useradddress.length> 0) { %>
+                                <% useradddress.forEach((address, index)=> { %>
+                                    <div class="row mt-4">
+                                        <div class="col-md-6">
+                                            <h5>Address <%= index + 1 %>
+                                            </h5>
+                                            <%= address.firstname %>
+                                                <%= address.lastname %>
+                                                    <%= address.address %>
+                                                        <%= address.city %>
+                                                            <%= address.pincode %>,
+                                                                <%= address.phone %>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <!-- Buttons for edit and delete -->
+                                            <div class="text-md-right mt-md-3">
+                                                <a href="/addressedit/<%= address._id %>"
+                                                    class="btn btn-primary">Edit</a>
+                                                <button onclick="confirmdelete('<%=address._id %>')"
+                                                    class="btn btn-danger">Delete</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <% }); %>
+                                        <% } %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="custom-popup2" class="custom-popup" style="position: absolute;">
+            <h2>Are you sure you want to Logout?</h2>
+            <div class="popup-buttons">
+                <button id="delete-button2" class="btn btn-danger">Yes</button>
+                <button id="cancel-button2" class="btn btn-secondary">Cancel</button>
+            </div>
+        </div>
+
+        <div id="custom-popup" class="custom-popup " style="position: absolute;">
+            <h2>Are you sure you want to Delete?</h2>
+            <div class="popup-buttons">
+                <button id="delete-button" class="btn btn-danger">Yes</button>
+                <button id="cancel-button" class="btn btn-secondary">Cancel</button>
+            </div>
+        </div>
+                
+    </div>
+
+
+    <script>
+        function confirm() {
+            var popup = document.getElementById('custom-popup2');
+            popup.style.display = 'block';
+
+            document.getElementById('delete-button2').addEventListener('click', function () {
+                window.location.href = '/logout'
+            });
+
+            document.getElementById('cancel-button2').addEventListener('click', function () {
+                popup.style.display = 'none';
+            });
+        }   
+    </script>
+    <script>
+        function confirmdelete(id) {
+            var popup = document.getElementById('custom-popup');
+            popup.style.display = 'block';
+
+            document.getElementById('delete-button').addEventListener('click', function () {
+                window.location.href = '/deleteaddress/' + id;
+            });
+
+            document.getElementById('cancel-button').addEventListener('click', function () {
+                popup.style.display = 'none';
+            });
+        }
+    </script>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>

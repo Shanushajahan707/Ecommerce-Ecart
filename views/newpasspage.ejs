@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Professional Login Page</title>
+  <link rel="stylesheet" href="/style/mdb.min.css" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f7f7f7;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .login-container {
+      max-width: 400px;
+      margin: 0 auto;
+      padding: 40px;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .logo {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .logo img {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      font-weight: bold;
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+
+    .login-button {
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    .signup-link {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 14px;
+    }
+
+    .alert {
+      padding: 10px;
+      background-color: #f8d7da;
+      border: 1px solid #f5c6cb;
+      border-radius: 4px;
+      color: #721c24;
+      font-size: 14px;
+      text-align: center;
+    }
+    .error-message {
+      color: red;
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <!-- Container wrapper -->
+    <div class="container-fluid mx-3">
+      <!-- Toggle button -->
+      <button class="navbar-toggler" type="button" data-mdb-toggle="collapse"
+        data-mdb-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+        aria-label="Toggle navigation">
+        <i class="fas fa-bars"></i>
+      </button>
+
+      <!-- Collapsible wrapper -->
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <!-- Navbar brand -->
+        <a class="navbar-brand mt-2 mt-lg-0" href="#">
+          <!-- <img src="img/[removal.ai]_c4d2c10c-7940-48dc-90a4-b90aa8006f6e-screenshot-2023-10-27-203006.png" style="width: 6vw; height: 9vh;" alt="MDB Logo"
+          loading="lazy" /> -->
+          <h3>E- <span style="color: red;">CART</span></h3>
+        </a>
+        <!-- Left links -->
+
+        <!-- Left links -->
+      </div>
+      <!-- Collapsible wrapper -->
+
+
+
+      <!-- Avatar -->
+
+      <a class=" d-flex align-items-center " href="/userlogin" id="navbarDropdownMenuAvatar" role="button"
+        data-mdb-toggle="tooltip" title="Login">
+        <i class="fas fa-circle-user " style="font-size: 2em;"></i>
+
+      </a>
+
+    </div>
+
+    <!-- Right elements -->
+    </div>
+    <!-- Container wrapper -->
+  </nav>
+  <% if (typeof message !== 'undefined') { %>
+    <div class="alert alert-danger text-center">
+        <%= message %>
+    </div>
+<% } %>
+  <div class="login-container mt-5">
+    <div class="logo">
+      <img src="img/ECART.png" alt="Logo">
+    </div>
+    <form action="/newpasswordpost" method="post">
+        <div class="form-group">
+          <label for="email">New Password</label>
+          <input type="password" name="newpass1">
+          <span id="new-password-error" class="error-message">New Password is required</span>
+        </div>
+        <div class="form-group">
+          <label for="password">Confirm Password</label>
+          <input class="password" type="password" name="newpass2">
+          <span id="confirm-password-error" class="error-message">Confirm Password is required</span>
+          <span id="password-match-error" class="error-message">Passwords do not match</span>
+        </div>
+        <button type="submit" class="login-button">Login</button>
+      </form>
+      
+   
+<!-- 
+    <% if(typeof message !== 'undefined') { %>
+    <div class="alert alert-danger">
+      <%= message %>
+    </div>
+    <% } %> -->
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      document.querySelector('form').addEventListener('submit', function(event) {
+        var newPasswordInput = document.querySelector('input[name="new-password"]');
+        var confirmPasswordInput = document.querySelector('input[name="confirm-password"]');
+        var newPasswordErrorMessage = document.querySelector('#new-password-error');
+        var confirmPasswordErrorMessage = document.querySelector('#confirm-password-error');
+        var passwordMatchErrorMessage = document.querySelector('#password-match-error');
+  
+        // Reset error messages
+        newPasswordErrorMessage.style.display = 'none';
+        confirmPasswordErrorMessage.style.display = 'none';
+        passwordMatchErrorMessage.style.display = 'none';
+  
+        // Check if new password is null or empty
+        if (!newPasswordInput.value) {
+          newPasswordErrorMessage.style.display = 'block';
+          event.preventDefault(); // Prevent form submission
+        }
+  
+        // Check if confirm password is null or empty
+        if (!confirmPasswordInput.value) {
+          confirmPasswordErrorMessage.textContent = 'Please confirm your password.';
+          confirmPasswordErrorMessage.style.display = 'block';
+          event.preventDefault(); // Prevent form submission
+        }
+  
+        // Check if password and confirm password match
+        if (newPasswordInput.value !== confirmPasswordInput.value) {
+          passwordMatchErrorMessage.textContent = 'Passwords do not match.';
+          passwordMatchErrorMessage.style.display = 'block';
+          event.preventDefault(); // Prevent form submission
+        }
+      });
+    });
+  </script>
+  
+  
+</body>
+
+</html>

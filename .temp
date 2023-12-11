@@ -1,0 +1,298 @@
+
+//       const chart1Container = document.querySelector('#mychart1');
+// const rawDates = chart1Container.getAttribute('data-dates');
+// const dates = JSON.parse(rawDates);
+// const rawDailyOrders = chart1Container.getAttribute('data-dailyOrder');
+// const dailyOrders = JSON.parse(rawDailyOrders);
+
+// // Use the last order date as the end date
+// const orderEndDate = moment(dates[dates.length - 1]);
+// const lastWeek = [];
+// let orders = [];
+
+// // Generate labels and data for the last week from the current date
+// for (let i = 6; i >= 0; i--) {
+//   const startOfWeek = orderEndDate.clone().subtract(i, 'weeks').startOf('week');
+//   const endOfWeek = startOfWeek.clone().endOf('week');
+
+//   // Filter dates within the current week
+//   const weekDates = dates.filter(date => moment(date).isBetween(startOfWeek, endOfWeek, null, '[]'));
+
+//   // Calculate the sum of orders for the current week
+//   const weekOrders = weekDates.map(date => {
+//     const index = dates.indexOf(date);
+//     return index !== -1 ? dailyOrders[index] : 0;
+//   });
+
+//   const weekTotalOrders = weekOrders.reduce((sum, order) => sum + order, 0);
+
+//   orders.push(weekTotalOrders);
+//   lastWeek.push(startOfWeek.format('YYYY-MM-DD') + ' to ' + endOfWeek.format('YYYY-MM-DD'));
+// }
+
+// const ctx1 = document.getElementById('mychart1').getContext('2d');
+// const masspopchart1 = new Chart(ctx1, {
+//   type: 'bar',
+//   data: {
+//     labels: lastWeek,
+//     datasets: [{
+//       label: 'Weekly Orders',
+//       data: orders,
+//       backgroundColor: 'rgba(255, 0, 0, 0.3)',
+//       barThickness: 20
+//     }]
+//   },
+//   options: {
+//     animation: {
+//       duration: 2000,
+//       easing: 'easeInOutQuart',
+//       onProgress: function (animation) {
+//         console.log("progress", animation.progress);
+//       },
+//       onComplete: function (animation) {
+//         console.log('Animation complete');
+//       }
+//     }
+//   }
+// });
+
+
+
+
+///checkout
+
+// const ordercheckout = async (req, res) => {
+//     console.log('enter here');
+//     const usercart = await cartcollection.find({ userid: req.session.userid });
+//     const today = new Date();
+//     const options = { year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+//     const todaydate = today.toLocaleString('en-US', options);
+//     const deliveryDate = new Date(today);
+//     deliveryDate.setDate(today.getDate() + 4);
+//     const deliveryDateString = deliveryDate.toLocaleString('en-US', options);
+//     //expected date chenging
+//     // console.log(usercart);
+//     for (const item of usercart) {
+//         const orderData = {
+//             userid: item.userid,
+//             username: item.username,
+//             productid: item.productid,
+//             productname: item.product,
+//             quantity: item.quantity,
+//             price: item.price,
+//             status: 'pending',
+//             orderdate: todaydate,
+//             deliverydate: deliveryDateString,
+//             address: req.body.selectedaddress,
+//             paymentmode: req.body.paymentmode,
+//             discount: req.session.coupen
+//         };
+//         await ordercollection.create(orderData)
+//             .then(x => {
+//                 // console.log('inserted the order ' + x);
+//             })
+//         await productcollection.updateOne(
+//             { _id: item.productid },
+//             { $inc: { Stock: -item.quantity } }
+//         );
+//     }
+//     await cartcollection.deleteMany({ userid: req.session.userid })
+//         .then(x => {
+//             // console.log('user cart delted');
+//         })
+//     // console.log("insert");
+//     try {
+      
+//         // Send the HTML page as response
+//         res.type('text/html').send(popupHTML);
+//         await cartcollection.find()
+//     } catch (error) {
+//         console.log(error);
+//     }
+// }
+
+
+
+  // console.log(req.body.croppedImages);
+  // // Check if product with the same name already exists
+  // const existingProduct = await Product.findOne({ Productname: data.Productname });
+  // if (existingProduct) {
+  //   const cat = await categorycollection.find()
+  //   // console.log('Product with the same name already exists');
+  //   res.render('adminaddproduct', { categories: cat, message: "Product with the same name already exists" })
+  //   return;
+  // }
+  // // console.log(req.files);
+  // // console.log(data);
+  // await addproduct.insertMany([data])
+  //   .then(x => {
+  //     console.log('inserted');
+  //   });
+
+
+
+
+
+//   const ordercheckout = async (req, res) => {
+//     try {
+//         const usercart = await cartcollection.find({ userid: req.session.userid });
+//         const today = new Date();
+//         const options = { year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+//         const todaydate = today.toLocaleString('en-US', options);
+//         const deliveryDate = new Date(today);
+//         deliveryDate.setDate(today.getDate() + 4);
+//         const deliveryDateString = deliveryDate.toLocaleString('en-US', options);
+
+//         // Create an array to store cart items
+//         const productCollectionArray = [];
+
+//         for (const item of usercart) {
+//             const productData = {
+//                 productid: item.productid,
+//                 productName: item.product,
+//                 price: item.price,
+//                 quantity: item.quantity,
+//             };
+
+//             productCollectionArray.push(productData);
+
+//             // Update product stock
+//             await productcollection.updateOne(
+//                 { _id: item.productid },
+//                 { $inc: { Stock: -item.quantity } }
+//             );
+//         }
+
+//         const orderData = {
+//             userid: req.session.userid,
+//             username: usercart[0].username, // Assuming username is the same for all cart items
+//             productcollection: productCollectionArray,
+//             orderdate: todaydate,
+//             deliverydate: deliveryDateString,
+//             address: req.body.selectedaddress,
+//             paymentmode: req.body.paymentmode,
+//             discount: req.body.discount, // Assuming discount is sent in the request body
+//             status:"pending"
+//         };
+
+//         // Create a single order document with an array of cart items
+//         await ordercollection.create(orderData);
+
+//         // Delete user's cart
+//         await cartcollection.deleteMany({ userid: req.session.userid });
+
+//     // console.log("insert");
+    
+//         const popupHTML = `
+//         <!DOCTYPE html>
+//         <html lang="en">
+//         <head>
+//             <meta charset="UTF-8">
+//             <meta name="viewport" content="width=device-width, initial-scale=1.0">
+//             <title>Order Received</title>
+//             <style>
+//                 body {
+//                     display: flex;
+//                     justify-content: center;
+//                     align-items: center;
+//                     height: 100vh;
+//                     margin: 0;
+//                     background-color: #f0f0f0;
+//                     font-family: Arial, sans-serif;
+//                 }
+//                 .popup-container {
+//                     background: #ffffff;
+//                     padding: 20px;
+//                     border: 1px solid #ccc;
+//                     border-radius: 8px;
+//                     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+//                     text-align: center;
+//                     font-size: 16px;
+//                     color: #333;
+//                     max-width: 300px;
+//                 }
+//                 .tick {
+//                     font-size: 48px;
+//                     color: #00a000; /* Green color for the checkmark */
+//                 }
+//             </style>
+//         </head>
+//         <body>
+//             <div class="popup-container">
+//                 <div class="tick">&#10004;</div>
+//                 <p>Your order has been received!</p>
+//             </div>
+//             <script>
+//                 setTimeout(() => {
+//                     window.location.href = '/userhome';
+//                 }, 3000);
+//             </script>
+//         </body>
+//         </html>
+        
+//         `;
+//         // Send the HTML page as response
+//         res.type('text/html').send(popupHTML);
+//     } catch (error) {
+//         console.log(error);
+//         // Handle error response
+//         res.status(500).send('Internal Server Error');
+//     }
+// };
+
+
+
+
+
+// const { ObjectId } = require('mongodb')
+// const mongoose = require('mongoose')
+
+
+// const orderSchema = new mongoose.Schema({
+//     userid: {
+//         type: ObjectId
+//     },
+//     username: {
+//         type: String
+//     },
+//     productcollection: [
+//         {
+//             productid: {
+//                 type: ObjectId
+//             },
+//             productName: {
+//                 type: String,
+//                 required: true
+//             },
+//             price: {
+//                 type: Number,
+//                 required: true
+//             },
+//             quantity: {
+//                 type: Number,
+//                 required: true
+//             },
+//         }
+//     ],
+//     orderdate: {
+//         type: Date
+//     },
+//     deliverydate: {
+//         type: Date
+//     },
+//     address: {
+//         type: Object
+//     },
+//     paymentmode: {
+//         type: String
+//     },
+//     discount: {
+//         type: String,
+//     },
+//     status:{
+//         type:String
+//     }
+// });
+
+// const orderstructure = mongoose.model('orders', orderSchema)
+// module.exports = orderstructure
