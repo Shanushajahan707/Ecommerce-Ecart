@@ -4,7 +4,7 @@ const atlasConnectionUri = process.env.MONGO;
 
 mongoose.connect(atlasConnectionUri, {
     useNewUrlParser: true,
-    useUnifiedTopology: true, 
+    useUnifiedTopology: true,
 })
     .then(() => {
         console.log("MongoDB connected successfully");
