@@ -84,6 +84,8 @@ router.get('/seeproductwithacc/:id', checkSessionAndBlocked, usercontroller.seep
 router.get('/categorylist', checkSessionAndBlocked, usercontroller.categorylist)
 //route for enter the registered email for the forgot otp 
 router.get('/emailcheck',  usercontroller.mailpage)
+//
+router.get('/resendwithforgot', usercontroller.resendotp)
 //post for the email
 router.post('/checkemail',  usercontroller.mailpagepost)
 //otp page render
