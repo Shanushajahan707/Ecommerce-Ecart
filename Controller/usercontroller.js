@@ -389,7 +389,7 @@ const mailotp = (req, res) => {
 
 const mailotppost = (req, res) => {
   const otpvalue = req.body.otp;
-  if (req.session.newotp == otpvalue) {
+  if (newotp == otpvalue) {
     res.json({ success: true, redirect: '/newpassword' });
   } else {
     res.json({ success: false, message: 'Wrong OTP' });
@@ -400,7 +400,7 @@ const resendotp = async (req, res) => {
   const otp = generateRandomString(6);
   // Change 6 to the desired length of OTP
   await sendOtpEmail(req.session.mail, otp)
-  req.session.newotp = otp
+  newotp = otp
   // 10000 milliseconds (10 seconds)
   res.redirect('/otpcheck')
 }
