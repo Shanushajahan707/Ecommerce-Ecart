@@ -386,6 +386,7 @@ const mailotp = (req, res) => {
   }, 60000);
   res.render('mailotp')
 }
+
 const mailotppost = (req, res) => {
   const otpvalue = req.body.otp
   console.log("value si", otpvalue);
@@ -398,14 +399,13 @@ const mailotppost = (req, res) => {
     res.render('mailotp', { message: "Wrong OTP" })
   }
 }
-const resendotp = async (req, res) => {
 
+const resendotp = async (req, res) => {
   const otp = generateRandomString(6);
   // Change 6 to the desired length of OTP
   await sendOtpEmail(req.session.mail, otp)
   req.session.newotp = otp
   // 10000 milliseconds (10 seconds)
-
   res.redirect('/otpcheck')
 }
 

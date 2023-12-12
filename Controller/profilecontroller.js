@@ -145,6 +145,7 @@ const updateprofilepost = async (req, res) => {
             await profileimage.deleteOne({ userid: req.session.userid })
         }
         // console.log(req.file);
+      if(req.file){
         const data = {
             userid: id,
             profilepic: req.file.path.substring(6)
@@ -153,14 +154,17 @@ const updateprofilepost = async (req, res) => {
             .then(x => {
                 // console.log('insertted ',x);
             })
+      }
         await usercollection.findByIdAndUpdate(id, {
             username: req.body.username,
             email: req.body.email
         })
             .then(x => {
-                res.redirect('/userprofile')
+               
                 // res.render('updateprofile', { userdata: x, message: "updated profile" })
             })
+
+            res.redirect('/userprofile')
     } catch (error) {
         console.log(error);
     }

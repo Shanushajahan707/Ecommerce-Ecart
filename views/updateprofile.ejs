@@ -64,12 +64,12 @@
     <form class="col s12" action="/updateprofile/<%= userdata._id %>" method="post" enctype="multipart/form-data">
       <div class="row">
         <div class="input-field col s12 m12 l6">
-          <input id="username" name="username" type="text" value="<%= userdata.username %> " required class="validate" pattern="^\S.{1,23}\S$" title="Please enter a username between 3-25 characters" length="25">
+          <input id="username" name="username" type="text" value="<%= userdata.username %> " required>
           <label for="username">Username</label>
         </div>
        <div class="input-field col s12 m12 l6">
           <i class="material-icons prefix"></i>
-          <input id="email" type="email" name="email" value="<%= userdata.email %>" required class="validate" title="Please enter a valid email">
+          <input id="email" type="email" name="email" value="<%= userdata.email %>" required>
           <label for="email">Email</label>
         </div>
     </div>

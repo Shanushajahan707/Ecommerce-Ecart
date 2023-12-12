@@ -221,7 +221,7 @@
         if (emailInput.value.trim() === '') {
           emailErrorMessage.style.display = 'block';
           setTimeout(() => {
-            emailErrorMessage.innerHTML = '';
+            emailErrorMessage.style.display = 'none';
           }, 2000);
           event.preventDefault(); // Prevent form submission
         }
