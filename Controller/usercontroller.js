@@ -72,7 +72,7 @@ const loginpost = async (req, res) => {
     }
   } catch (error) {
     console.log('error while post:', error);
-    res.status(500).json({ success: false, message: 'Internal Server Error' });
+    res.status(500).json({ success: false, message: 'Unathorized Entry' });
   }
 };
 

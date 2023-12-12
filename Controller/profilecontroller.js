@@ -156,8 +156,7 @@ const updateprofilepost = async (req, res) => {
             })
       }
         await usercollection.findByIdAndUpdate(id, {
-            username: req.body.username,
-            email: req.body.email
+            username: req.body.username
         })
             .then(x => {
                
