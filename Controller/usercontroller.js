@@ -370,7 +370,7 @@ const mailpagepost = async (req, res) => {
     // console.log(email);
     await sendOtpEmail(emaill, otp)
     newotp = otp
-    console.log('otp is ', req.session.newotp);
+    // console.log('otp is ', req.session.newotp);
     console.log('otp sented');
 
 
@@ -388,17 +388,13 @@ const mailotp = (req, res) => {
 }
 
 const mailotppost = (req, res) => {
-  const otpvalue = req.body.otp
-  console.log("value si", otpvalue);
-  console.log('session otp is', req.session.newotp);
-
-  if (newotp == otpvalue) {
-    res.redirect('/newpassword')
+  const otpvalue = req.body.otp;
+  if (req.session.newotp == otpvalue) {
+    res.json({ success: true, redirect: '/newpassword' });
+  } else {
+    res.json({ success: false, message: 'Wrong OTP' });
   }
-  else {
-    res.render('mailotp', { message: "Wrong OTP" })
-  }
-}
+};
 
 const resendotp = async (req, res) => {
   const otp = generateRandomString(6);

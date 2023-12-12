@@ -200,7 +200,7 @@
         <% } %>
     
         <!-- Mobile OTP Form -->
-        <form class="mobile-otp" action="/otpcheck" method="post">
+        <form class="mobile-otp" id="otpForm" action="/otpcheck" method="post">
             <h2 class="otp-heading">OTP Verification</h2>
             <div class="otp-container">
                 <!-- Six input fields for OTP digits -->
@@ -209,7 +209,9 @@
     
             <!-- Field to display entered OTP -->
             <!-- Button to verify OTP -->
-            <button type="submit" id="verifyMobileOTP" class="otp-button">VERIFY &amp; PROCEED</button>
+            <button type="button" id="verifyMobileOTP" class="otp-button">VERIFY &amp; PROCEED</button>
+            <div id="otpMessageContainer"></div>
+
     
             <!-- Timer and Resend Button -->
             <div class="timer-container">
@@ -218,7 +220,36 @@
             </div>
         </form>
     </div>
-    
+    <script>
+        document.getElementById('verifyMobileOTP').addEventListener('click', async function () {
+          const otpValue = document.querySelector('.otp-input').value;
+      
+          try {
+            const response = await fetch('/otpcheck', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ otp: otpValue }),
+            });
+      
+            const data = await response.json();
+      
+            if (data.success) {
+              window.location.href = data.redirect;
+
+            } else {
+              document.getElementById('otpMessageContainer').innerHTML = data.message;
+              setTimeout(() => {
+                document.getElementById('otpMessageContainer').innerHTML = "";
+              }, 3000);
+            }
+          } catch (error) {
+            console.error('Error:', error);
+          }
+        });
+      </script>
+      
     <script>
         let timer;
         let timeLeft = 60;
