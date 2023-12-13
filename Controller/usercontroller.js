@@ -373,8 +373,6 @@ const mailpagepost = async (req, res) => {
     // console.log('otp is ', req.session.newotp);
     console.log('otp sented');
 
-
-
     res.redirect('/otpcheck')
   } else {
     res.render('emailpage', { message: "The Registered Email is Not Found" })
