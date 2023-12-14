@@ -134,6 +134,7 @@
                                     </select>
                                     <%}%>
                         </div> 
+                        
                     </div>
                     <div class="col-lg-4">
 
@@ -170,7 +171,16 @@
                         </div>
 
                     </div>
+                    
                     <div class="col-lg-4">
+                        <label for="UrunMiktar">Coupen</label>
+                        <select name="category" class="form-select" id="UrunMiktar">
+                            <% coupens.forEach(coupen=> { %>
+                            <option value="<%= coupen.coupencode %>">
+                                <%= coupen.coupencode %>
+                            </option>
+                            <% }); %>
+                        </select>
                         <h5>Total Price: <span id="total-price">
                                 <% totalPrice=0; %>
                                     <% for (let i=0; i < usercart.length; i++) { %>
@@ -181,13 +191,12 @@
                                                         <% } %>
                                                             ₹<%= totalPrice.toFixed(2) %>
                             </span></h5>
-                      
-                                <div class="input-group">
-                                    <input id="coupencode" name="coupencode" type="text" class="form-control"
-                                        placeholder="Enter the code">
-                                    <button id="coupenbtn" type="button" class="btn btn-info"
-                                        onclick="applyCoupon('<%= totalPrice %>')">Apply Now</button>
-                                </div>
+                           
+                            <div class="input-group">
+                                <input id="coupencode" name="coupencode" type="text" class="form-control" placeholder="Enter the code">
+                                <button id="coupenbtn" type="button" class="btn btn-info" onclick="applyCoupon('<%= totalPrice %>')">Apply Now</button>
+                            </div>
+                            
                                 <div id="messageContainer"></div>
                                 <h5>Wallet Amount: <span id="wallet-amount">₹<%= walletAmount.toFixed(2) %></span> <i
                                         class="fas fa-wallet"></i></h5>

@@ -213,6 +213,7 @@
                             <th>Total Amount</th>
                             <th>Total Quantity</th>
                             <th>OrderDate</th>
+                            <th>Method</th>
                             <th>Status</th>
                             <th>Action</th>
                             <th>More</th>
@@ -228,6 +229,7 @@
                                         <td>₹<%= product.price * product.quantity %></td>
                                         <td><%= product.quantity %></td>
                                         <td><%= order.orderdate%></td>
+                                        <td><%= order.paymentmode%></td>
                                         <td><%= product.status %></td>
                                         <td>
                                             <% if (product.status !== "Cancelled" && product.status !== "Returned") { %>

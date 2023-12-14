@@ -6,6 +6,7 @@ const { cart } = require('./cartcontroller');
 const ordercollection = require('../models/order')
 const productcollection = require('../models/products')
 const returncollection = require('../models/returnorders');
+const coupencollection=require('../models/coupen')
 const users = require('../models/users');
 //ordr page with total 
 const orderpage = async (req, res) => {
@@ -24,7 +25,8 @@ const orderpage = async (req, res) => {
         const walletAmount = user ? user.wallet : 0;
         const useraddress = await addresscollection.find({ userid: id })
         const totalQuantity = usercart.reduce((total, item) => total + item.quantity, 0);
-        res.render('ordersummary', { usercart, useraddress, totalQuantity, totalPrice, walletAmount })
+        const coupens=await coupencollection.find()
+        res.render('ordersummary', { usercart, useraddress, totalQuantity, totalPrice, walletAmount,coupens })
     } else {
         res.redirect('/cartitems')
     }
@@ -162,10 +164,10 @@ const walletorder = async (req, res) => {
 
         let walletAmount = user.wallet;
         console.log('wallet amount before', walletAmount);
-
+        let productData
         const productCollectionArray = [];
         for (const item of usercart) {
-            const productData = {
+             productData = {
                 productid: item.productid,
                 productName: item.product,
                 price: item.price,
@@ -200,10 +202,15 @@ const walletorder = async (req, res) => {
         // Delete user's cart
         await cartcollection.deleteMany({ userid: req.session.userid });
         // Update the user's wallet amount
+        let totalPrice = 0;
+        for (const item of usercart) {
+            totalPrice += item.price * item.quantity;
+        }
+        walletAmount -= totalPrice;
         user.wallet = walletAmount;
         await user.save();
-
-        // Delete user's cart entries
+        
+        console.log('wallet amount after', walletAmount);
         await cartcollection.deleteMany({ userid: userId });
 
         // Popup HTML for order received
@@ -233,17 +240,19 @@ const walletorder = async (req, res) => {
 const canceluserorder = async (req, res) => {
     try {
         const orderId = req.params.id;
-        const userid=req.session.userid
+        const userid = req.session.userid;
         console.log('id is ', orderId);
-        const newstatus ="Cancelled"
+        const newstatus = "Cancelled";
         const usercart = await cartcollection.find({ userid: req.session.userid });
+
         // Update the status in the ordercollection
         const updatedOrder = await ordercollection.findOneAndUpdate(
             { userid, 'productcollection._id': orderId },
             { $set: { 'productcollection.$.status': newstatus } },
             { new: true }
-          );          
+        );
         console.log('Updated Order:', updatedOrder);
+
         // Update the stock in the productcollection
         for (const item of usercart) {
             await productcollection.updateOne(
@@ -251,12 +260,29 @@ const canceluserorder = async (req, res) => {
                 { $inc: { Stock: item.quantity } }
             );
         }
+        const user = await users.findById(userid);
+        let walletAmount = user.wallet;
+        console.log('Wallaet Before:', walletAmount);
+        if (updatedOrder.paymentmode === 'Wallet' || updatedOrder.paymentmode === 'net-banking') {
+            const product = updatedOrder.productcollection[0];
+
+            const data = {
+                amount: product.price * product.quantity
+            };
+
+            const user = await users.findById(req.session.userid);
+           const walletam= user.wallet += data.amount; 
+            await user.save();
+            console.log('Wallet After:', walletam);
+        }
+
         res.redirect('/orders');
     } catch (error) {
         console.error(error);
         res.status(500).send('Internal Server Error');
     }
 };
+
 
 
 // controllers.js
@@ -282,7 +308,7 @@ const returnorder = async (req, res) => {
 
         const data = {
             userid: req.session.userid,
-            product: product.productName, // Adjust accordingly based on your schema
+            product: product.productName, 
             amount: product.price * product.quantity
         };
 
