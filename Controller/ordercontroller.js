@@ -245,7 +245,6 @@ const canceluserorder = async (req, res) => {
         const newstatus = "Cancelled";
         const usercart = await cartcollection.find({ userid: req.session.userid });
 
-        // Update the status in the ordercollection
         const updatedOrder = await ordercollection.findOneAndUpdate(
             { userid, 'productcollection._id': orderId },
             { $set: { 'productcollection.$.status': newstatus } },
@@ -253,7 +252,6 @@ const canceluserorder = async (req, res) => {
         );
         console.log('Updated Order:', updatedOrder);
 
-        // Update the stock in the productcollection
         for (const item of usercart) {
             await productcollection.updateOne(
                 { _id: item.productid },
@@ -262,7 +260,7 @@ const canceluserorder = async (req, res) => {
         }
         const user = await users.findById(userid);
         let walletAmount = user.wallet;
-        console.log('Wallaet Before:', walletAmount);
+        console.log('Wallet Before:', walletAmount);
         if (updatedOrder.paymentmode === 'Wallet' || updatedOrder.paymentmode === 'net-banking') {
             const product = updatedOrder.productcollection[0];
 
