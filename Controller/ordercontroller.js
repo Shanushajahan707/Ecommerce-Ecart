@@ -7,6 +7,7 @@ const ordercollection = require('../models/order')
 const productcollection = require('../models/products')
 const returncollection = require('../models/returnorders');
 const coupencollection=require('../models/coupen')
+const wishlistcollection=require('../models/wishlist')
 const users = require('../models/users');
 //ordr page with total 
 const orderpage = async (req, res) => {
@@ -329,15 +330,92 @@ const returnorder = async (req, res) => {
         res.json({ success: false, message: 'Failed to handle return order' });
     }
 };
+const addToWishlist= async (req, res) => {
+    const userId = req.session.userid;
+    const productId = req.params.id;
+
+    const userData = await users.findOne({ _id: userId });
+    const productData = await productcollection.findOne({ _id: productId });
+    // console.log('value for tje wisj',userData,productData);
+    const newWislist = new wishlistcollection({
+      userid: userData._id,
+      user: userData.username,
+      productid: productData._id,
+      product: productData.Productname,
+      price: productData.Price,
+      image: productData.image[0],
+    });
+
+    newWislist.save();
+    res.redirect("/wishlistpage");
+  }
+
+ const removeFromWishlist= async (req, res) => {
+    console.log('enterd in reomve');
+    const userId = req.session.userid;
+    const productId = req.params.id;
+    await wishlistcollection.findOneAndDelete({ userid: userId, productid: productId })
+    res.redirect("/wishlistpage");
+  }
+
+const wishlistpage =async(req,res)=>{
+    const wishlistdata=await wishlistcollection.find({userid:req.session.userid})
 
 
+    res.render('wishlist',{wishlistdata})
+}
+const addcartformwishlist =async(req,res)=>{
+    try {
+        const productid = req.params.id;
+        const cartItem = await cartcollection.find({ userid: req.session.userid });
+        let productFound = false;
+        for (const item of cartItem) {
+            if (item.productid == productid) {
+              
+                productFound = true;
+                await cartcollection.updateOne(
+                    { _id: item._id },
+                    { 
+                        $inc: { 
+                            quantity: 1
+                        }
+                    }   
+                );
+                break;
+            }
+        }
+        if (!productFound) {
+            const product = await productcollection.findById(productid);
+            const username=await users.findById({_id:req.session.userid})
+            // console.log('usermame is '+username.username);
+            const cartData = {
+                userid: req.session.userid,
+                username:username.username,
+                productid: productid,
+                product: product.Productname,
+                price: product.offer && product.offer.newPrice ? product.offer.newPrice : product.Price,
+                quantity: 1,
+                image: product.image[0]
+            };
+            await cartcollection.insertMany([cartData]);
+        }
 
-
+        await wishlistcollection.findOneAndDelete({userid:req.session.userid,productid:productid})
+        res.redirect("/wishlistpage");
+       
+    } catch (error) {
+        console.log(error);
+    }
+}
 
 module.exports = {
     orderpage,
     ordercheckout,
     canceluserorder,
     returnorder,
-    walletorder
+    walletorder,
+    addToWishlist,
+    removeFromWishlist,
+    wishlistpage,
+    addcartformwishlist
 } 

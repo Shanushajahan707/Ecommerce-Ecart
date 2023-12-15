@@ -129,7 +129,7 @@
               <a class="nav-link" href="#footer">Contact </a>
             </li>
           </ul>
-          <a href=""> <i class="fas fa-heart" style="font-size:3vh;  margin-right: 2rem;"></i></a>
+          <a href="/wishlistpage"> <i class="fas fa-heart" style="font-size:3vh;  margin-right: 2rem;"></i></a>
           <div style="position: relative;">
             <a href="/cartitems" data-mdb-toggle="tooltip" data-mdb-placement="bottom" title="Cart">
               <i class="fas fa-cart-shopping" style="font-size:3vh; margin-right: 3rem;">
@@ -219,7 +219,15 @@
                 <%= datas[i].Price %>
               </p>
               <a href="/seeproductwithacc/<%= datas[i]._id %>" class="btn btn-primary">View More</a>
-              <a href="/addcart/<%= datas[i]._id %>" class="btn btn-info float-end">Add To Cart</a>
+              <!-- <a href="/addcart/<%= datas[i]._id %>" class="btn btn-info float-end">Add To Cart</a> -->
+              <button class="btn btn-link wishlist-btn" onclick="toggleWishlist('<%= datas[i]._id %>')">
+                <% if(wishlistProducts.some(wishlistProduct=> wishlistProduct._id.equals(datas[i]._id))) { %>
+                  <i class="fa-solid fa-heart" id="fa-heart<%= datas[i]._id %>"></i>
+                  <% } else { %>
+                    <i class="fa-regular fa-heart" id="fa-heart<%= datas[i]._id %>"></i>
+                             <% } %>
+                             
+              </button>
             </div>
           </div>
           <% } %>
@@ -370,6 +378,35 @@
     });
   </script>
   <script>
+    function toggleWishlist(productid) {
+      const icon = document.getElementById(`fa-heart${productid}`);
+      if (icon && icon.classList.contains('fa-regular')) {
+        fetch(`/addtowishlist/${productid}`)
+          .then(() => {
+            console.log('clicked wihs');
+            icon.classList.remove('fa-regular');
+            icon.classList.add('fa-solid');
+          })
+          .catch(error => {
+            console.error('Error:', error);
+          });
+
+        // icon.style.color = '#ff291a';
+        // Logic to handle adding the product to the wishlist...
+      } else if (icon) {
+        fetch(`/removewishlist/${productid}`)
+          .then(() => {
+            icon.classList.remove('fa-solid');
+            icon.classList.add('fa-regular');
+          })
+          .catch(error => {
+            console.error('Error:', error);
+          });
+
+        // Logic to handle removing the product from the wishlist...
+      }
+    }
+
     function searchFunction() {
       const searchInput = document.getElementById('search').value;
       // Make an AJAX request to your server with the search query

@@ -4,6 +4,7 @@ const product = require('../models/products')
 const cart = require('../models/cart')
 const offercontroller = require('../models/productoffer')
 const categorycollection=require('../models/category')
+const wishlistcollection=require('../models/wishlist')
 const { render } = require('ejs');
 const express = require('express');
 const { use } = require('../routes/admin');
@@ -256,14 +257,29 @@ const otppost = async (req, res) => {
 }
 //user home
 const userHome = async (req, res) => {
-  const userid = req.session.userid
-  const datas = await product.find({ isList: true, Stock: { $gt: 1 } });
-  const cartfound = await cart.find({ userid: req.session.userid })
-  const cartcount = cartfound.length;
-  // console.log("count is"+cartcount);
-  console.log(userid, "count is ", cartcount);
-  res.render('userhome', { datas, userid, cartcount })
+    try {
+      const userId = req.session.userid;
+      const datas = await product.find({
+        isList: true,
+        Stock: { $gt: 1 },
+      });
+      const wishlistItems = await wishlistcollection.find({ userid: req.session.userid });
+      const wishlistProductIds = wishlistItems.map((item) => item.productid);
+      // console.log('daat',datas);
+      const wishlistProducts = await product.find({
+        _id: { $in: wishlistProductIds },
+      }).select('Productname');
+
+      const cartfound = await cart.find({ userid: req.session.userid })
+      const cartcount = cartfound.length;
+      // console.log('wihslist pr',wishlistProducts);
+      res.render("userhome", { datas, userId, wishlistProducts,cartcount });
+    } catch (err) {
+      console.error(err);
+      return res.status(500).send("Internal Server Error");
+      }
 }
+
 //product detials redeer
 const seeproductget = async (req, res) => {
   try {

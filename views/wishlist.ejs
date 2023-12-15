@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+        integrity="sha512-xw9Jot6oebpCtDE5w5ezT9zU+vEk+tj+uN5EeTr39KKFgWujBiF0neWIpS8tD4cByxSSerNs8EezWU3uFtXBSA=="
+        crossorigin="anonymous" />
+
+
+    <style>
+        .cover {
+            position: relative;
+            z-index: 0;
+            width: 100%;
+            background: #e79702;
+        }
+
+        .phone {
+            z-index: 1;
+            font-weight: 200;
+        }
+
+        .phone i {
+            color: #000;
+        }
+
+        .phone a {
+            color: #000;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .reg {
+            width: 50%;
+            text-align: right;
+        }
+
+        .reg a {
+            color: #000;
+            text-transform: uppercase;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .social-icon {
+            display: inline-block;
+            width: 50%;
+
+        }
+
+        .social-icon p {
+            display: block;
+            width: 100%;
+
+        }
+
+        .social-icon p a {
+            height: 30px;
+            margin-right: 10px;
+        }
+
+        .social-icon p a i {
+            font-size: 13px;
+            color: #000;
+        }
+
+        .social-icon p a:hover {
+            background: #f8aa02;
+            border-color: #f8aa02;
+        }
+
+        .social-icon p a:hover i {
+            color: #fff;
+        }
+
+        /*==========Navbar=============*/
+        .bg-color {
+            background: #0f0f0ffb;
+        }
+
+        .navbar-brand {
+            color: #f8aa02;
+            font-weight: bold;
+            font-size: 35px !important;
+        }
+
+        .nav-link {
+            font-weight: bold;
+            color: #f8aa02;
+            font-size: 20px;
+        }
+
+        .btn-group {
+            color: #f8aa02;
+        }
+
+        .navbar-toggler i {
+            color: #f8aa02;
+        }
+
+        /*========End of Navbar===========*/
+        /*==========Hero Section===========*/
+
+        .cart .table {
+            margin-bottom: 30px;
+            border-bottom: 1px solid #fff;
+        }
+
+        .cart .table thead tr th {
+            border-top: 0px;
+            font-size: 16px;
+            font-weight: bold;
+            border-bottom: 0px;
+        }
+
+        .cart .table thead tr td {
+            padding-top: 30px;
+            padding-bottom: 30px;
+            vertical-align: middle;
+            align-self: center;
+        }
+
+        .cart .table tbody tr td .main .d-flex {
+            padding-right: 30px;
+        }
+
+        .cart .table tbody tr td .main .d-flex img {
+            border: 2px solid #000;
+            border-radius: 3px;
+        }
+
+        .cart .table tbody tr td .main .des {
+            vertical-align: middle;
+            align-self: center;
+        }
+
+        .cart .table tbody tr td .main .des p {
+            margin-bottom: 0px;
+        }
+
+        .cart .table tbody tr td h6 {
+            font-size: 16px;
+            color: #000;
+            margin-bottom: 0px;
+        }
+
+        .cart .table tbody tr td .counter {
+            margin-bottom: 0px;
+        }
+
+        .counter i {
+            border: 1px solid #000;
+            padding: 7px;
+            display: inline-block;
+            position: relative;
+        }
+
+        .cart .table tbody tr td .counter input {
+            width: 100px;
+            padding-left: 30px;
+            height: 40px;
+            outline: none;
+            box-shadow: none;
+        }
+
+
+        .checkout .proceed-btn {
+            font-size: 15px;
+            font-weight: bold;
+            color: #fff;
+            background: #252525;
+            text-transform: uppercase;
+            padding: 15px 25px 14px 25px;
+            display: block;
+            text-align: center;
+        }
+
+        .coupon-form {
+            margin-top: 10px;
+        }
+
+        .input-group {
+            display: flex;
+        }
+
+        .form-control {
+            flex: 1;
+            border-radius: 5px 0 0 5px;
+
+        }
+
+        .btn-info {
+            border-radius: 0 5px 5px 0;
+        }
+
+        .messageContainer {
+            margin-top: 10px;
+            padding: 15px;
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            border-radius: 4px;
+            color: #d44838;
+            font-size: 13px;
+            text-align: center;
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light ">
+        <!-- Container wrapper -->
+        <div class="container-fluid mx-3">
+            <!-- Toggle button -->
+            <button class="navbar-toggler" type="button" data-mdb-toggle="collapse"
+                data-mdb-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <i class="fas fa-bars"></i>
+            </button>
+
+            <!-- Collapsible wrapper -->
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <!-- Navbar brand -->
+                <a class="navbar-brand mt-2 mt-lg-0" href="#">
+                    <!-- <img src="img/[removal.ai]_c4d2c10c-7940-48dc-90a4-b90aa8006f6e-screenshot-2023-10-27-203006.png" style="width: 6vw; height: 9vh;" alt="MDB Logo"
+              loading="lazy" /> -->
+                    <h3>E- <span style="color: red;">CART</span></h3>
+                </a>
+                <!-- Left links -->
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/userhome">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/categorylist">Shop</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#!">About </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#!">Contact </a>
+                    </li>
+                </ul>
+                <form class="d-flex input-group w-auto me-4">
+                    <input type="search " class="form-control rounded" placeholder="Search Products" aria-label="Search"
+                        aria-describedby="search-addon" />
+
+                </form>
+                <!-- Left links -->
+            </div>
+            <!-- Collapsible wrapper -->
+            <!-- Avatar -->
+            <a href="" data-mdb-toggle="tooltip" title="Account"><i class="fas fa-circle-user "
+                    style="font-size: 2em;"></i>
+            </a>
+            <!-- <a href="/logout"><button>Logout</button></a> -->
+        </div>
+
+        <!-- Right elements -->
+        </div>
+        <!-- Container wrapper -->
+    </nav>
+    <section class="mt-5">
+        <% if (wishlistdata.length> 0) { %>
+            <% wishlistdata.forEach(( product, index )=> { %>
+                <div class="card mb-6 mb-3">
+                    <div class="card-body">
+                        <div class="row mb-3 col-md-12">
+                            <div class="col-md-3">
+                                <img src="<%= product.image %>" alt="<%= product.product %>"
+                                    class="img-fluid" style="height: 120px; width: 100px;">
+                            </div>
+                            <div class="col-md-4">
+                                <h5>
+                                    <%= product.product %>
+                                </h5>
+                                <p><strong>Price:</strong> ₹ <%= product.price %>
+                                </p>
+                            </div>
+                            <div class="col-md-5 d-flex flex-row justify-content-between align-items-center">
+                                <!-- <button class="btn btn-danger">Remove</button> -->
+                                    <a href="/addtocartfromwishlist/<%= product.productid %>"
+                                        class="btn btn-primary ml-5">Add to cart</a>
+                                    <a href="/removewishlist/<%= product.productid %>"
+                                        class="btn btn-danger">Remove</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <% }); %>
+                    <% } else { %>
+                        <div class="col">
+                            <h1 class="text-center">No prducts!</h1>
+                        </div>
+                        <% } %>
+    </section>
+
+ 
+
+
+
+
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.11/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>
