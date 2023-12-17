@@ -263,42 +263,47 @@
   }
 
 
-  * {box-sizing: border-box;}
+  * {
+    box-sizing: border-box;
+  }
 
-.img-zoom-container {
-  position: relative;
-}
+  .img-zoom-container {
+    position: relative;
+  }
 
-.img-zoom-lens {
-  position: absolute;
-  border: 1px solid #d4d4d4;
-  /*set the size of the lens:*/
-  width: 40px;
-  height: 40px;
-}
+  .img-zoom-lens {
+    position: absolute;
+    border: 1px solid #d4d4d4;
+    /*set the size of the lens:*/
+    width: 40px;
+    height: 40px;
+  }
 
-.img-zoom-result {
-  border: 1px solid #d4d4d4;
-  /*set the size of the result div:*/
-  width: 300px;
-  height: 300px;
-}
-.img-showcase {
+  .img-zoom-result {
+    border: 1px solid #d4d4d4;
+    /*set the size of the result div:*/
+    width: 300px;
+    height: 300px;
+  }
+
+  .img-showcase {
     display: flex;
     transition: transform 0.5s ease-in-out;
   }
 
   .img-showcase img {
-    width: 100%; /* Set a common width for the images */
-    height: auto; /* Maintain the aspect ratio */
-    display: block; /* Remove extra space below inline-block images */
+    width: 100%;
+    /* Set a common width for the images */
+    height: auto;
+    /* Maintain the aspect ratio */
+    display: block;
+    /* Remove extra space below inline-block images */
   }
 
   /* Center the images horizontally */
   .img-display {
     overflow: hidden;
   }
-
 </style>
 
 <body>
@@ -378,8 +383,9 @@
         <div class="img-display">
           <div class="img-showcase mb-4">
             <% data.image.forEach(function(imageSrc, index) { %>
-              <img style="height: 70vh; width: 5vw;" id="myimage<%= index %>" class="big_img" src="<%= imageSrc %>" alt="shoe image">
-            <% }); %>
+              <img style="height: 70vh; width: 5vw;" id="myimage<%= index %>" class="big_img" src="<%= imageSrc %>"
+                alt="shoe image">
+              <% }); %>
           </div>
         </div>
         <div class="img-select">
@@ -389,7 +395,7 @@
                 <img style="height: 20vh; width: 9rem;" src="<%= imageSrc %>" alt="shoe image">
               </a>
             </div>
-          <% }); %>
+            <% }); %>
         </div>
       </div>
 
@@ -408,43 +414,47 @@
             <%= data.Rating %>(21)
           </span>
         </div>
-  
-        <div class="product-price">
-          
 
-          <% if (data.offer && data.offer.percentage > 0) { %>
+        <div class="product-price">
+
+
+          <% if (data.offer && data.offer.percentage> 0) { %>
             <!-- Display offer details if available -->
             <p class="last-price">Old Price: <span>₹<%= data.Price%>.00</span></p>
             <p class="offer-price">Offer: <%= data.offer.percentage %>% Off</p>
-            <p>Discount Amount: ₹<%= data.offer.discountAmount %></p>
-            <p class="new-price">New Price: ₹<%= data.offer.newPrice %></p>
+            <p>Discount Amount: ₹<%= data.offer.discountAmount %>
+            </p>
+            <p class="new-price">New Price: ₹<%= data.offer.newPrice %>
+            </p>
             <!-- Optionally, you can display the total price -->
-            <p class="total-price">Total Price: ₹<%= data.offer.newPrice %></p>
-          <% } else { %>
-            <!-- Display a message if there is no offer -->
-            <p>No offer available for this product</p>
-            
-            <!-- Display the original price as total price when there's no offer -->
-            <p class="total-price">Total Price: ₹<%= data.Price %></p>
-          <% } %>
-          
+            <p class="total-price">Total Price: ₹<%= data.offer.newPrice %>
+            </p>
+            <% } else { %>
+              <!-- Display a message if there is no offer -->
+              <p>No offer available for this product</p>
+
+              <!-- Display the original price as total price when there's no offer -->
+              <p class="total-price">Total Price: ₹<%= data.Price %>
+              </p>
+              <% } %>
+
         </div>
-  
+
         <div class="product-detail">
           <h2>About this item:</h2>
           <p>
             <%= data.Description %>
           </p>
         </div>
-  
+
         <div class="purchase-info">
           <a href="/addcart/<%= data._id %>" class="btn btn-info float-end">Add To Cart</a>
         </div>
       </div>
     </div>
   </div>
-  
-  
+
+
 
 
   <footer class="text-center text-lg-start bg-light text-muted ">
@@ -564,7 +574,7 @@
     const imgs = document.querySelectorAll('.img-select a');
     const imgBtns = [...imgs];
     let imgId = 1;
-  
+
     imgBtns.forEach((imgItem) => {
       imgItem.addEventListener('click', (event) => {
         event.preventDefault();
@@ -572,24 +582,24 @@
         slideImage();
       });
     });
-  
+
     function slideImage() {
       const displayWidth = document.querySelector('.img-showcase img:first-child').clientWidth;
-  
+
       document.querySelector('.img-showcase').style.transform = `translateX(${- (imgId - 1) * displayWidth}px)`;
     }
-  
+
     window.addEventListener('resize', slideImage);
   </script>
-<script type="text/javascript">
-  $(document).ready(function () {
-	$('.big_img').imagezoomsl({
-	  zoomrange: [3, 3]
-	});
-})
-</script>
-<script src="/js/zoomsl.js"></script>
-<script src="/js/zoomsl.min.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function () {
+      $('.big_img').imagezoomsl({
+        zoomrange: [3, 3]
+      });
+    })
+  </script>
+  <script src="/js/zoomsl.js"></script>
+  <script src="/js/zoomsl.min.js"></script>
   <!-- Add Bootstrap JS and Popper.js (required for some Bootstrap features) -->
   <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/elevatezoom@3.0.8/dist/jquery.elevatezoom.css"> -->
   <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->

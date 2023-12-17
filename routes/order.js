@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const ordercontroller = require('../Controller/ordercontroller');
 const { get } = require('mongoose');
+const users=require('../models/users')
+
 
 const checkSessionAndBlocked = async (req, res, next) => {
   if (req.session.userid) {
@@ -27,7 +29,7 @@ const checkSessionAndBlocked = async (req, res, next) => {
 };
  
 //order summary page render
-router.get('/ordersummary', ordercontroller.orderpage)
+router.get('/ordersummary',checkSessionAndBlocked, ordercontroller.orderpage)
 //order order checkout page
 router.post('/orderdata', ordercontroller.ordercheckout)
 router.post('/placeOrderWithWallet',ordercontroller.walletorder)
@@ -35,9 +37,11 @@ router.post('/placeOrderWithWallet',ordercontroller.walletorder)
 router.get('/cancelorder/:id', ordercontroller.canceluserorder)
 
 router.get('/submit-return/:id',ordercontroller.returnorder)
+
 router.get('/addtowishlist/:id',ordercontroller.addToWishlist)
 router.get('/removewishlist/:id',ordercontroller.removeFromWishlist)
-router.get('/wishlistpage',ordercontroller.wishlistpage)
+router.get('/wishlistpage',checkSessionAndBlocked,ordercontroller.wishlistpage)
+
 router.get('/addtocartfromwishlist/:id',ordercontroller.addcartformwishlist)
 
 
