@@ -37,7 +37,7 @@ const checkSessionAndBlocked = async (req, res, next) => {
       // User is not blocked, proceed to the next middleware or route handler
       next();
     } else {
-      // User is blocked, destroy the session and redirect
+     
       req.session.destroy((err) => {
         if (err) {
           console.log("Error destroying session: ", err);
@@ -48,11 +48,11 @@ const checkSessionAndBlocked = async (req, res, next) => {
       });
     }
   } else {
-    // No userId in session, redirect to the default page
+   
     res.redirect("/");
   }
 };
-//
+
 
 
 
