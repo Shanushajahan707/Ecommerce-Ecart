@@ -340,26 +340,26 @@ const categorylist = async (req, res) => {
     console.log('enter the list');
 
     // Pagination
-    const page = parseInt(req.query.page) || 1;
-    const limit = 3; // Set the number of products per page
-    const skip = (page - 1) * limit;
+    // const page = parseInt(req.query.page) || 1;
+    // const limit = 3;
+    // const skip = (page - 1) * limit;
 
     // Fetch products with pagination
     const data = await product.find({ isList: true, Stock: { $gt: 1 } })
       .populate('Category')
-      .skip(skip)
-      .limit(limit);
+      // .skip(skip)
+      // .limit(limit);
 
     // Calculate total number of products
-    const totalProducts = await product.countDocuments({ isList: true });
+    // const totalProducts = await product.countDocuments({ isList: true });
 
     // Calculate total number of pages
-    const totalPages = Math.ceil(totalProducts / limit);
+    // const totalPages = Math.ceil(totalProducts / limit);
 
     // Adjust current page if it exceeds total pages
-    const currentPage = Math.min(page, totalPages);
+    // const currentPage = Math.min(page, totalPages);
 
-    res.render('shop', { data, currentPage, totalPages });
+    res.render('shop', { data,  });
   } catch (error) {
     console.log(error);
   }

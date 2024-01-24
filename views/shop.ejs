@@ -6,6 +6,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title>Category List</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <!-- DataTable HEADER-->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
+
+
 </head>
 
 <body>
@@ -49,47 +54,51 @@
   </nav>
   <div class="container mt-5">
     <h1 class="text-center">Brand List</h1>
-    <div class="row">
-      <div class="row">
-        <% data.forEach(val => { %>
-          <div class="col-md-4 mb-4">
-            <div class="card">
-              <img src="<%= val.image[0] %>" style="height: 50vh;" class="card-img-top" alt="Category Image">
-              <div class="card-body">
-                <h5 class="card-title">Brand <%= val.Category.Category %></h5>
-                <p class="card-text"><%= val.Productname %></p>
-                <p class="card-text">Price: ₹<%= val.Price %></p>
-                <p class="card-text">Rating: <%= val.Rating %></p>
-                <div class="d-flex justify-content-between align-items-center">
-                  <a href="/seeproductwithacc/<%= val._id %>" class="btn btn-primary">View More</a>
-                  <a href="/addcart/<%= val._id %>" class="btn btn-info float-end">Add To Cart</a>
-                </div>
-              </div>
-            </div>
-          </div>
-        <% }) %>
-      </div>
-    </div>
-    <div class="pagination justify-content-center mt-4">
-      <% if (currentPage > 1) { %>
-        <a href="?page=<%= currentPage - 1 %>" class="prev-arrow" aria-label="Previous">
-          <i class="fa fa-long-arrow-left" aria-hidden="true"></i>
-        </a>
-      <% } %>
-      <% for (let i = 1; i <= totalPages; i++) { %>
-        <a href="?page=<%= i %>" class="<%= i === currentPage ? 'active page-link' : 'page-link' %>">
-          <%= i %>
-        </a>
-      <% } %>
-      <% if (currentPage < totalPages) { %>
-        <a href="?page=<%= currentPage + 1 %>" class="next-arrow" aria-label="Next">
-          <i class="fa fa-long-arrow-right" aria-hidden="true"></i>
-        </a>
-      <% } %>
+    <div class="table-responsive">
+      <table id="example" class="table table-striped" style="width:100%">
+        <thead>
+          <tr>
+            <th scope="col">Image</th>
+            <th scope="col">Brand</th>
+            <th scope="col">Product Name</th>
+            <th scope="col">Price</th>
+            <th scope="col">Rating</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% data.forEach(val => { %>
+            <tr>
+              <td><img src="<%= val.image[0] %>" class="img-fluid" style="max-height: 7rem;" alt="Category Image"></td>
+              <td><%= val.Category.Category %></td>
+              <td><%= val.Productname %></td>
+              <td>₹<%= val.Price %></td>
+              <td><%= val.Rating %></td>
+              <td>
+                <a href="/seeproductwithacc/<%= val._id %>" class="btn btn-primary">View More</a>
+                <a href="/addcart/<%= val._id %>" class="btn btn-info">Add To Cart</a>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
     </div>
   </div>
   
 
+  <!-- for filter/sort/pagination table -->
+  <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+  <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  
+  <script src="https://cdn.datatables.net/v/bs5/dt-1.13.8/datatables.min.js"></script>  
+  <script>
+     new DataTable('#example');
+     
+     
+    </script>
+<!-- / -->
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
